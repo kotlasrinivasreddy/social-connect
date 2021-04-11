@@ -20,7 +20,7 @@ const userSchema= new mongoose.Schema({
         required: true
     },
     salt: String, // salt is long randomly generated complicated string , used as secret in encryption
-    create:{
+    created:{
         type: Date,
         default: Date.now
     },

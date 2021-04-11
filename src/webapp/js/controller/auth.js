@@ -63,6 +63,8 @@ exports.signout = (req, res) => {
     //to sign out we need to remove/delete the cookie we created while signing in
     res.clearCookie("token"); //there will be no cookie, so user will not be authenticated
     return res.json({message: "successfully logged out"});
+    //if we hit from postman, it doesn't clear the cookie as we're not in client side front end
+    //it doesn't make sense to hit from postman
 }; // end of signout method
 
 

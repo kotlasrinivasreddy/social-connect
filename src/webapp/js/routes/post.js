@@ -1,6 +1,5 @@
 
 const express= require('express');
-//const postController = require('../controller/post');
 const {getPosts, createPost} = require('../controller/post');
 const {requireSignin} = require('../controller/auth');
 const {userById} = require('../controller/user');
@@ -15,7 +14,7 @@ router.get('/getPost', getPosts);
 router.post('/createPost', requireSignin, validator.createPostValidator, createPost);
 
 //look for the param in the request. Call userById method if userId param exists in the request
-//if any route contains userId then app.js execute userById method
+//if any route contains userId then firstly app.js executes userById method
 router.param("userId", userById);
 
 module.exports= router;

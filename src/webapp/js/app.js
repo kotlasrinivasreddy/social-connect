@@ -5,6 +5,7 @@ const app= express();
 const morgan = require('morgan');
 const postRoutes= require('./routes/post');
 const authRoutes= require('./routes/auth');
+const userRoutes= require('./routes/user');
 const expressValidator= require('express-validator');
 const bodyParser= require('body-parser');
 const cookieParser= require('cookie-parser');
@@ -25,6 +26,7 @@ app.use(expressValidator());
 //perform the routing of requests
 app.use("/", postRoutes);
 app.use("/", authRoutes);
+app.use("/", userRoutes);
 app.use(function (err, req, res, next) {
 	if (err.name === 'UnauthorizedError') {
 		res.status(401).json({
