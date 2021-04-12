@@ -10,6 +10,8 @@ const expressValidator= require('express-validator');
 const bodyParser= require('body-parser');
 const cookieParser= require('cookie-parser');
 const mongoose = require('mongoose');
+const fs= require('fs');
+const cors= require('cors'); // we use this as middleware
 // load env variables
 const dotenv = require('dotenv');
 dotenv.config()
@@ -17,16 +19,35 @@ dotenv.config()
 
 //middleware using morgan
 app.use(morgan("dev"));
-
 //changing app.get to app.use as we're using router
 app.use(bodyParser.json()); //using bodyParser as middleware- now any incoming request with body parsed to json
 app.use(cookieParser());
 app.use(expressValidator());
 //all the app.use statements should be before routes because we need to load add everything to app and then
 //perform the routing of requests
+app.use(cors());
 app.use("/", postRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
+
+//api documentation
+app.get("/", (req, res) => {
+
+	//const file_data= JSON.parse(fs.readFileSync('./apiDocumentation/docs.json', 'utf-8'));
+	//console.log("file data from readFileSync: "+ JSON.stringify(file_data));
+	//use ./ for accessing folders at same level, directly mentioning '/' won't work
+	fs.readFile('./apiDocumentation/docs.json', (error, data) => {
+		if(error)
+			res.status(400).json(error);
+
+		//console.log("printing data from file: "+ data.toString());
+		const parsed_file= JSON.parse(data);
+		res.json(parsed_file);
+	});
+}); // end of displaying api documentation route
+
+
+
 app.use(function (err, req, res, next) {
 	if (err.name === 'UnauthorizedError') {
 		res.status(401).json({

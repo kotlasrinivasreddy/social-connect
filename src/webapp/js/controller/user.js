@@ -90,7 +90,7 @@ exports.deleteUser = (req, res) => {
         // req.profile.salt = undefined;
         // req.profile.__v = undefined;
         // res.json({deletedUser}); //generally we shouldn't show the deleted user
-        res.json({message: "user account deleted successfullly"});
+        res.json({message: "user account deleted successfully"});
     });
 
 };// end of deleteUser method
