@@ -2,7 +2,7 @@
   "name": "social-connect",
   "version": "1.0.0",
   "description": "social network project",
-  "main": "app.js",
+  "main": "",
   "scripts": {
     "dev": "nodemon app.js"
   },

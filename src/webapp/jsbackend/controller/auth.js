@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
 
     //we assume emails are unique and we use to find the duplicates users
     const userExists= await User.findOne({email: req.body.email});
-    if(userExists) return res.status(403).json({
+    if(userExists) return res.status(400).json({
         error: "Email is already taken by some other user, please provide different email address"
     });
 

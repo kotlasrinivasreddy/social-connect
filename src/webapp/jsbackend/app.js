@@ -20,7 +20,7 @@ dotenv.config()
 //middleware using morgan
 app.use(morgan("dev"));
 //changing app.get to app.use as we're using router
-app.use(bodyParser.json()); //using bodyParser as middleware- now any incoming request with body parsed to json
+app.use(bodyParser.json());//using bodyParser as middleware- now any incoming request with body parsed to json
 app.use(cookieParser());
 app.use(expressValidator());
 //all the app.use statements should be before routes because we need to load add everything to app and then
