@@ -1,6 +1,8 @@
 
 const _ = require('lodash'); //general syntax is referring lodash by _ (underscore)
 const User= require('../models/user'); //user model class containing schema and methods on schema
+const formidable= require('formidable');
+const fs= require('fs');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id).exec( (error, user) => {
@@ -32,7 +34,7 @@ exports.allUsers = (req, res, next) => {
             });
         }
         //if no errors then
-        res.json({users});
+        res.json(users);
         next();
     }).select("name email created updated");
 
@@ -52,29 +54,63 @@ exports.getSingleUser = (req, res) => {
 
 //method for user information/profile update
 exports.updateUser = (req, res) => {
-    //when we provide userId in the request url, automatically userById method will be executed and
-    // attaches the user info from database as the profile field
-    let user= req.profile;
-    //we use extend method of lodash to update the user profile
-    //we update the source object(from database) with given fields in the req.body
-    //if the fields in the req body are different from user fields then updations are performed
-    user = _.extend(user, req.body);
-    //filling the updated field of user
-    user.updated = Date.now();
-    //finally saving the changes of user object to the database
-    user.save( (error) => {
+    let form= new formidable.IncomingForm();
+    form.keepExtensions= true;
+    form.parse( req, (error, fields, files) => {
         if(error)
-            res.json({
-               error: "You're not authorized to perform update operation"
-            });
-        //if no error while saving .. then user friendly response with updated fields
-        //we don't want to print hashed_password, salt, _v
-        req.profile.hashed_password = undefined;
-        req.profile.salt = undefined;
-        req.profile.__v = undefined;
-        res.json({user});
-    });
-}; // end of update user method
+            return res.status(400).json({error: "problems while uploading profile pic"});
+        //saving user
+        let user= req.profile;
+        user= _.extend(user, fields);
+        user.updated= Date.now();
+        if(files.photo){
+            user.photo.data= fs.readFileSync(files.photo.path); //photo is the name in the front end form
+            user.photo.contentType= files.photo.type
+            //console.log("entered editing photo to new photo");
+        }
+        user.save( (error, result) => {
+            if(error)
+                return res.status(400).json({error});
+            user.hashed_password= undefined; //making hashed password not available for front end
+            user.salt= undefined;
+            res.json(user);
+        })
+
+    }) //end of form parse
+}; // end of updateUser method
+
+// exports.updateUser = (req, res) => {
+//     //when we provide userId in the request url, automatically userById method will be executed and
+//     // attaches the user info from database as the profile field
+//     let user= req.profile;
+//     //we use extend method of lodash to update the user profile
+//     //we update the source object(from database) with given fields in the req.body
+//     //if the fields in the req body are different from user fields then updations are performed
+//     user = _.extend(user, req.body);
+//     //filling the updated field of user
+//     user.updated = Date.now();
+//     //finally saving the changes of user object to the database
+//     user.save( (error) => {
+//         if(error)
+//             res.json({
+//                error: "You're not authorized to perform update operation"
+//             });
+//         //if no error while saving .. then user friendly response with updated fields
+//         //we don't want to print hashed_password, salt, _v
+//         req.profile.hashed_password = undefined;
+//         req.profile.salt = undefined;
+//         req.profile.__v = undefined;
+//         res.json({user});
+//     });
+// }; // end of update user method
+
+exports.userPhoto= (req, res, next) => {
+    if(req.profile.photo.data){
+        res.set(("Content-Type", req.profile.photo.contentType));
+        return res.send(req.profile.photo.data);
+    }
+    next();
+}; // end of user photo
 
 //method to delete user from the social-connect application
 exports.deleteUser = (req, res) => {

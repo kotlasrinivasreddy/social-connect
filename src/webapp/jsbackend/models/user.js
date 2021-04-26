@@ -24,7 +24,15 @@ const userSchema= new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    updated: Date
+    updated: Date,
+    photo: {
+        data: Buffer,
+        contentType: String
+    },
+    about: {
+        type: String,
+        trim: true
+    }
 });
 
 //virtual field -- these fields are just to take input from the user -- won't be persisted to database

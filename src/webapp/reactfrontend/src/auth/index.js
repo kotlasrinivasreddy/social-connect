@@ -2,7 +2,7 @@
 export const signup = user => {
     //now we need to make post request to /signup method in the backend
     // we can use axios or fetch
-    return fetch("http://localhost:3001/signup", {
+    return fetch(`${process.env.REACT_APP_API_URL}/signup`, {
         method: "POST",
         headers: {
             "Accept": "application/json",
@@ -19,7 +19,8 @@ export const signup = user => {
 export const signin = user => {
     //now we need to make post request to /signin method in the backend
     // we can use axios or fetch
-    return fetch("http://localhost:3001/signin", {
+    console.log(`${process.env.REACT_APP_API_URL}/signin`);
+    return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
         method: "POST",
         headers: {
             "Accept": "application/json",
@@ -47,7 +48,7 @@ export const signout = (next) => {
     if( typeof window !== "undefined")
         localStorage.removeItem("jwt"); //this will remove the token on the client side
     next();
-    return fetch("http://localhost:3001/signout", {
+    return fetch(`${process.env.REACT_APP_API_URL}/signout`, {
         method: "GET"
     })
         .then(response => {
