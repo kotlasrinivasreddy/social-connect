@@ -1,11 +1,15 @@
 
 const express= require('express');
 const {requireSignin} = require('../controller/auth');
-const {userById, allUsers, getSingleUser, updateUser, deleteUser, userPhoto } = require('../controller/user');
+const {userById, allUsers, getSingleUser, updateUser, deleteUser, userPhoto,
+        addFollowing, addFollower, removeFollowing, removeFollower, findPeople} = require('../controller/user');
 const router= express.Router();
 //using express router we can do request routing of get post or any other method
 //kind of middleware using routes
 
+//we need to update following list and followers list -- so 2 methods may be
+router.put('/user/follow', requireSignin, addFollowing, addFollower);
+router.put('/user/unfollow', requireSignin, removeFollowing, removeFollower);
 
 router.get('/getAllUsers', allUsers); //get allUsers
 //make it secure access by checking signin
@@ -13,8 +17,12 @@ router.get('/getSingleUser/:userId', requireSignin, getSingleUser); //get single
 //to update the user given the userId -- we use put method for updation -- requires signin
 router.put('/updateUser/:userId', requireSignin, updateUser);
 router.delete('/deleteUser/:userId', requireSignin, deleteUser);
-//photo rute
+//photo route
 router.get("/user/photo/:userId", userPhoto);
+
+//whom to follow
+router.get("/user/findPeople/:userId", requireSignin, findPeople);
+
 //rather than creating different paths as getSingleUser, updateUser and deleteUser
 //we can have common url /user/:userId and methods get, put, delete represents the action of url
 

@@ -6,7 +6,7 @@ import React from 'react';
 const Home = () => (
     <div className="jumbotron">
         <h2>Home</h2>
-        <p> welcome to react front end</p>
+        <p> welcome to home page</p>
     </div>
 );
 

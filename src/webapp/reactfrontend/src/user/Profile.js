@@ -4,16 +4,47 @@ import {Link, Redirect} from "react-router-dom";
 import {read} from "./apiUser";
 import defaultImage from '../images/default_profile_image.png';
 import DeleteUser from "./DeleteUser";
+import FollowProfileButton from "./FollowProfileButton";
+import ProfileTabs from "./ProfileTabs";
 
 class Profile extends Component
 {
     constructor() {
         super();
         this.state={
-            user: "",
-            redirectToSignin: false //when the user is not loggedin
-        }
+            user: {following: [], followers: []},
+            redirectToSignin: false, //when the user is not loggedin
+            following: false, // by default not following
+            error: ""
+        };
     }
+
+    //check following or not
+    checkFollow = user => {
+        //user will be the input from front end --- user is on whose profile we click to follow
+        const jwt= isAuthenticated();
+        //arrow function checking in the user's follower list whether loggedin user is already present
+        const match= user.followers.find(follower => {
+            //one id has many follower ids in followers list
+            return follower._id === jwt.user._id
+        });
+        return match; //returns true if loggedin user is already present in followers list
+    }; // end of checkFollow method
+
+    //here a method will be passed as parameter to the clickFollowButton
+    clickFollowButton = callApi => {
+        const userId= isAuthenticated().user._id;
+        const token= isAuthenticated().token;
+
+        callApi(userId, token, this.state.user._id).then(data => {
+            if(data.error)
+                this.setState({error: data.error});
+            else
+                this.setState({user: data, following: !this.state.following });
+                // we use same method for follow & unfollow, with not operator compliment the following state
+        }); // end of callApi method
+    }
+
 
     init = userId => {
         //passing the userId passed from componentDidMount method
@@ -22,7 +53,10 @@ class Profile extends Component
                 if(data.error) //if we get any error in the response from back end
                     this.setState({redirectToSignin: true});
                 else
-                    this.setState({user: data});
+                {
+                    let following= this.checkFollow(data);
+                    this.setState({user: data, following: following});
+                }
             });
     }
 
@@ -57,11 +91,11 @@ class Profile extends Component
                     </div>
                     <div className="col-md-6">
                         <div className="lead mt-2">
-                            <p>{user.name}</p>
+                            <p style={{color: "brown", fontSize: "40px"}}>{user.name}</p>
                             <p>Email: {user.email}</p>
                             <p>joined on: {new Date(user.created).toDateString()}</p>
                         </div>
-                        {isAuthenticated().user && isAuthenticated().user._id===user._id && (
+                        {isAuthenticated().user && isAuthenticated().user._id===user._id ? (
                             <div className="d-inline-block">
                                 <Link className="btn btn-raised btn-success mr-5"
                                       to={`/user/edit/${user._id}`}
@@ -70,16 +104,22 @@ class Profile extends Component
                                 </Link>
                                 <DeleteUser userId={user._id} />
                             </div>
-                        )}
-                    </div>
-                    <div className="row">
-                        <div className="col md-12 mt-5 mb-5">
-                            <hr/>
-                                <p className="lead">{user.about}</p>
-                            <hr/>
-                        </div>
+                        ) : (<FollowProfileButton
+                                following={this.state.following}
+                                onButtonClick={this.clickFollowButton} />)
+                        }
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col md-12 mb-5">
+                        <hr/>
+                        <p className="lead">{user.about}</p>
+                        <hr/>
+
+                        <ProfileTabs followers={user.followers} following={user.following} />
+                    </div>
+                </div>
+
             </div>
         );
     };// end of render method

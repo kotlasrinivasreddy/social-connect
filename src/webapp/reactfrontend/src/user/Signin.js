@@ -18,7 +18,7 @@ class Signin extends Component {
     // which requires event as input and sets the state
     handleChange = name => event => {
         this.setState({error: ""});
-        this.setState({open: false}); //to deactivate the div element once user starts signup again
+        this.setState({open: false}); //to deactivate the div element once user starts signin again
         this.setState({[name]: event.target.value});
     };
 
@@ -79,7 +79,7 @@ class Signin extends Component {
         const {email, password, error, redirectTo,loading} = this.state;
         if(redirectTo) //if redirect is true
         {
-            return <Redirect to="/"/>
+            return <Redirect to="/" />
         }
         return(
             <div className="container">

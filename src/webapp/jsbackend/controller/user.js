@@ -5,7 +5,11 @@ const formidable= require('formidable');
 const fs= require('fs');
 
 exports.userById = (req, res, next, id) => {
-    User.findById(id).exec( (error, user) => {
+    User.findById(id)
+        //populate followers and following users' list
+        .populate('following', '_id name')
+        .populate('followers', '_id name')
+        .exec( (error, user) => {
         if(error || !user){
             return res.status(400).json({
                 error: "user not found"
@@ -15,7 +19,7 @@ exports.userById = (req, res, next, id) => {
         req.profile = user;
         next(); // to make middle move to the next
     });
-}
+} //end of userById method
 
 exports.hasAuthorization = (req, res) => {
     const authorized = req.profile && req.auth && req.profile._id === req.auth._id;
@@ -130,3 +134,79 @@ exports.deleteUser = (req, res) => {
     });
 
 };// end of deleteUser method
+
+// methods for implementing follow and unfollow
+exports.addFollowing = (req, res, next) => {
+    //we get userId(logged in userId) and whom he clicked to follow from front end request
+    User.findByIdAndUpdate(req.body.userId, {$push: {following: req.body.followId}},
+        (error, result) => {
+        if(error)
+            return res.status(400).json({error});
+        next();
+    });
+} // end of addFollowing method
+
+exports.addFollower = (req, res, next) => {
+    //add logged in userId to the followId's follower list    new: true to get updated response
+    User.findByIdAndUpdate(req.body.followId, {$push: {followers: req.body.userId}}, {new: true})
+        //populating for returning response after executing addFollowing, addFollower
+        //make sure to put addFollowing and then addFollower in the router call so that
+        //response will be returned after executing both the functions
+        .populate('following', '_id name')
+        .populate('followers', '_id name')
+        .exec((error, result) => {
+            if(error)
+                return res.status(400).json({error});
+
+            result.hashed_password= undefined;
+            result.salt= undefined;
+            res.json(result);
+        });
+
+} // end of addFollower method
+
+
+exports.removeFollowing = (req, res, next) => {
+    //we get userId(logged in userId) and whom he clicked to follow from front end request
+    User.findByIdAndUpdate(req.body.userId, {$pull: {following: req.body.unfollowId}},
+        (error, result) => {
+            if(error)
+                return res.status(400).json({error});
+            next();
+        });
+} // end of removeFollowing method
+
+exports.removeFollower = (req, res, next) => {
+    //add logged in userId to the followId's follower list    new: true to get updated response
+    User.findByIdAndUpdate(req.body.unfollowId, {$pull: {followers: req.body.userId}}, {new: true})
+        //populating for returning response after executing addFollowing, addFollower
+        //make sure to put addFollowing and then addFollower in the router call so that
+        //response will be returned after executing both the functions
+        .populate('following', '_id name')
+        .populate('followers', '_id name')
+        .exec((error, result) => {
+            if(error)
+                return res.status(400).json({error});
+
+            result.hashed_password= undefined;
+            result.salt= undefined;
+            res.json(result);
+        });
+
+} // end of removeFollower method
+
+exports.findPeople= (req, res) => {
+    //get all the users whom the current signedin user is following
+    let already_following = req.profile.following;
+    already_following.push(req.profile._id); // pushing user himself to the aside list
+    //we find the users by _id --  not including users already_following users
+    User.find({_id: {$nin: already_following}}, (error, users) => {
+        if(error)
+            return res.status(400).json({error});
+
+        res.json(users); // returning users whom we can follow
+        //we don't have to send everything, just send name of the users
+    }).select("_id name");
+
+}; // end of findPeople method
+

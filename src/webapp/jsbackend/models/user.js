@@ -3,6 +3,7 @@
 const mongoose= require('mongoose');
 const uuidv1= require('uuidv1');
 const crypto= require('crypto');
+const {ObjectId}= mongoose.Schema;
 
 const userSchema= new mongoose.Schema({
     name: {
@@ -32,7 +33,9 @@ const userSchema= new mongoose.Schema({
     about: {
         type: String,
         trim: true
-    }
+    },
+    following: [{type: ObjectId, ref: "user_schema"}], //list with type and ref of that type
+    followers: [{type: ObjectId, ref: "user_schema"}]
 });
 
 //virtual field -- these fields are just to take input from the user -- won't be persisted to database
@@ -73,10 +76,6 @@ userSchema.methods= {
             return ""; //return empty string if there is an error in the try block
         }
     }
-
-}
-
-
-
+} // end of addingSchema methods
 
 module.exports = mongoose.model("user_schema", userSchema);

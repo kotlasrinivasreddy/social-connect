@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {isAuthenticated} from "../auth";
-import {read, update} from "./apiUser";
+import {read, update, updateUser} from "./apiUser";
 import {Redirect} from "react-router-dom";
 import defaultImage from "../images/default_profile_image.png";
 
@@ -46,24 +46,24 @@ class EditProfile extends Component {
         const {name, email, password, fileSize} = this.state;
         if(fileSize > 1000000)  // if size > 1 mb
         {
-            this.setState({error: "file size should be less than 1 mb"});
+            this.setState({error: "file size should be less than 1 mb", loading: false});
             return false;
         }
-        else if(name.length === 0)
+        else if(name.length === 0)//set loading=false(deactivate loading page) while showing error prompt
         {
-            this.setState({error: "Name is required"});
+            this.setState({error: "Name is required", loading: false});
             return false;
         }
         // email check using regular expression
         // in js regex is enclose inside / /    -- someone@someaddress.com or fd@add.co.in
         if( !(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.+[a-zA-Z]+$/.test(email)) ) //email is not valid
         {
-            this.setState({error: "enter valid email address"});
+            this.setState({error: "enter valid email address", loading: false});
             return false;
         }
         if(password.length > 0 && password.length<6) //if user tries to update the password
         {
-            this.setState({error: "password must be at least of length 6"});
+            this.setState({error: "password must be at least of length 6", loading: false});
             return false;
         }
         return true; // if no error, we return true
@@ -96,8 +96,11 @@ class EditProfile extends Component {
                 if(data.error)
                     this.setState({error: data.error});
                 else //clearing the object of state -- old values to empty string
-                    this.setState({
-                        redirectToProfile: true
+                    //data -- we get entire updated user info from back end api call as response
+                    updateUser(data, () => {
+                        this.setState({
+                            redirectToProfile: true
+                        });
                     });
             });
         } //end of if(isValid()) condition

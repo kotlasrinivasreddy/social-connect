@@ -67,3 +67,68 @@ export const remove = (userId, token) => {
             console.log(error);
         })
 }; // end of read method
+
+export const updateUser = (user, next) => {
+    if(typeof window !== "undefined") {
+        if (localStorage.getItem('jwt')) {
+            let auth = JSON.parse(localStorage.getItem('jwt')); //jwt contains token,user
+            auth.user = user; //updating user
+            localStorage.setItem('jwt', JSON.stringify(auth));
+            next();
+        }
+    }
+}; // end of updateUser method
+
+//follow method -- same signature as callApi method in Profile.js
+export const follow = (userId, token, followId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/follow`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, followId})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}; // end of follow method
+
+export const unfollow = (userId, token, unfollowId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/unfollow`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, unfollowId})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}; // end of unfollow method
+
+export const findPeople = (userId, token) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/findPeople/${userId}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}; // end of findPeople method
