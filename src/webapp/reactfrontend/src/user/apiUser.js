@@ -18,11 +18,11 @@ export const read = (userId, token) => {
 }; // end of read method
 
 export const update = (userId, token, user) => {
-    console.log(user);
+    //console.log(user);
     return fetch(`${process.env.REACT_APP_API_URL}/updateUser/${userId}`, {
         method: "PUT",
         headers: {
-            Accept: "application/json",
+            Accept: "application/json", //make sure we don't put Content-Type as this is form data
             Authorization: `Bearer ${token}`
         },
         body: user  //form is already key value pair, no need to json stringify
@@ -50,7 +50,7 @@ export const list = () => {
         })
 };
 
-//apply necessary headers and params by looking at postman deleteUser back end call
+//apply necessary headers and params by looking at already implemented postman deleteUser back end call
 export const remove = (userId, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/deleteUser/${userId}`, {
         method: "DELETE",

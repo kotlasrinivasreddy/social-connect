@@ -10,18 +10,26 @@ import Users from './user/Users';
 import EditProfile from "./user/EditProfile";
 import PrivateRoute from "./auth/PrivateRoute";
 import FindPeople from "./user/FindPeople";
+import NewPost from "./post/NewPost";
+import Posts from "./post/Posts";
+import SinglePost from "./post/SinglePost";
+import EditPost from "./post/EditPost";
 
 const MainRouter = () => (
   <div>
       <Menu />
       <Switch>
           <Route exact path="/" component={Home}></Route>
+          <PrivateRoute exact path="/create/post" component={NewPost}/>
           <Route exact path="/signup" component={Signup}/>
           <Route exact path="/signin" component={Signin}/>
           <Route exact path="/user/:userId" component={Profile}/>
           <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
           <Route exact path="/users" component={Users}/>
+          {/*<Route exact path="/posts" component={Posts} />*/}
           <PrivateRoute exact path="/findPeople" component={FindPeople} />
+          <Route exact path="/post/:postId" component={SinglePost} />
+          <PrivateRoute exact path="/post/edit/:postId" component={EditPost} />
 
       </Switch>
   </div>

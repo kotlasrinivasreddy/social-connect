@@ -31,9 +31,10 @@ exports.getPosts = (req, res) => {
 	//find() method gets all the documents from the database
 	 const posts= model_post.find()
 		 .populate("postedBy", "_id name")
-		 .select("_id title body")
+		 .select("_id title body created")
+		 .sort({created: -1}) // -1 to sort on reverse order of created date
 		 .then((posts) => {
-		 	res.json({posts});
+		 	res.json(posts);
 		 })
 		 .catch(err => console.log(err));
 };
@@ -52,8 +53,9 @@ exports.createPost = (req, res, next) => {
 				error: "image could not be uploaded"
 			});
 		}
-		//console.log("before post model creation");
+
 		let post= new model_post(fields);
+		//console.log("actual post is : ", post);
 		//we don't want to print hashed_password, salt, _v
 		req.profile.hashed_password = undefined;
 		req.profile.salt = undefined;
@@ -61,9 +63,12 @@ exports.createPost = (req, res, next) => {
 		post.postedBy = req.profile;
 		if(files.photo)
 		{
+			//console.log("field photo from model: ", post.photo);
 			post.photo.data= fs.readFileSync(files.photo.path);
 			post.photo.contentType= files.photo.type;
 		}
+		else //we give {} as default photo. so making it undefined if we don't get photo from front end
+			post.photo= undefined;
 		post.save( (error, result) => {
 			if(error)
 				return res.status(400).json(error);
@@ -117,24 +122,68 @@ exports.deletePostById = (req, res) => {
 	});
 }; //end of deletePostById
 
-
-exports.updatePostById = (req, res, next) => {
-	//when we provide postId in the request url, automatically postById method will be executed and
-	// attaches the post info from database as the post field to the request
-	let post= req.post[0];
-	//we use extend method of lodash to update the post
-	//we update the source object(from database) with given fields in the req.body
-	//if the fields in the req body are different from post fields then updating
-	post = _.extend(post, req.body);
-	//filling the updated field of post
-	post.updated = Date.now();
-	//finally saving the changes of post object to the database
-	post.save( (error) => {
+//method for user information/profile update  -- rewriting to handle form data
+exports.updatePostById = (req, res) => {
+	let form= new formidable.IncomingForm();
+	form.keepExtensions= true;
+	form.parse( req, (error, fields, files) => {
 		if(error)
+			return res.status(400).json({error: "problems while uploading post pic"});
+		//saving post
+		let post= req.post[0];
+		post= _.extend(post, fields);
+		post.updated= Date.now();
+		if(files.photo){
+			post.photo.data= fs.readFileSync(files.photo.path); //photo is the name in the front end form
+			post.photo.contentType= files.photo.type
+			//console.log("entered editing photo to new photo");
+		}
+		post.save( (error, result) => {
+			if(error)
 			res.json({
 				error: "You're not authorized to perform update operation"
 			});
-		//if no error while saving .. then user friendly response with updated fields
-		res.json({post});
-	});
-}; // end of update user method
+			res.json(post);
+		})
+
+	}) //end of form parse
+}; // end of updatePostById method
+
+
+// exports.updatePostById = (req, res, next) => {
+// 	//when we provide postId in the request url, automatically postById method will be executed and
+// 	// attaches the post info from database as the post field to the request
+// 	let post= req.post[0];
+// 	//we use extend method of lodash to update the post
+// 	//we update the source object(from database) with given fields in the req.body
+// 	//if the fields in the req body are different from post fields then updating
+// 	post = _.extend(post, req.body);
+// 	//filling the updated field of post
+// 	post.updated = Date.now();
+// 	//finally saving the changes of post object to the database
+// 	post.save( (error) => {
+// 		if(error)
+// 			res.json({
+// 				error: "You're not authorized to perform update operation"
+// 			});
+// 		//if no error while saving .. then user friendly response with updated fields
+// 		res.json({post});
+// 	});
+// }; // end of update post method
+
+exports.postPhoto= (req, res, next) => {
+	//console.log("inside post photo", req.post);
+	//console.log("inside post photo method", req.post[0].photo);
+	if(req.post[0].photo.data){
+		res.set(("Content-Type", req.post[0].photo.contentType));
+		return res.send(req.post[0].photo.data);
+	}
+	next();
+}; // end of postPhoto method
+
+exports.singlePost= (req, res) => {
+	//whenever there is uri param :postId in the request, postById method executes
+	//and provides us with the full post corresponding to postId
+	//Here we just need to grab that post
+	return res.json(req.post[0]);
+} // end of singlePost method

@@ -22,8 +22,6 @@ class Signin extends Component {
         this.setState({[name]: event.target.value});
     };
 
-
-
     //onClickSubmit will get an event upon clicking
     onClickSubmit = event => {
         //preventing default behaviour of the browser. i.e reloading on click
@@ -49,9 +47,6 @@ class Signin extends Component {
                 }// end of else
             });
     }; // end of onClickSubmit method
-
-
-
 
 
     //code refactoring -- moving form from render method to here

@@ -9,7 +9,7 @@
   "/deleteUser/:userId" : "delete user by userId",
   "/getPosts" : "get all posts -- no authentication required",
   "/createPost/:userId" : "create post from a userId",
-  "/getPostsByUser/:userId" : "get posts of a user using userId",
+  "/getPostsByUser/:userId" : "get all posts of a user using userId",
   "/deletePostById/:postId" : "delete a post by postId",
   "/updatePostById/:postId" : "update post by postId"
 

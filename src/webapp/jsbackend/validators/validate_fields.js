@@ -3,14 +3,14 @@
 exports.createPostValidator = (req, res, next) => {
     // title
     req.checkBody('title', 'Write a title').notEmpty();
-    req.checkBody('title', 'Title must be between 4 to 150 characters').isLength({
-        min: 10,
+    req.checkBody('title', 'Title must be between 4 to 100 characters').isLength({
+        min: 4,
         max: 100
     });
     // body
     req.checkBody('body', 'Write a body').notEmpty();
-    req.checkBody('body', 'Body must be between 4 to 2000 characters').isLength({
-        min: 10,
+    req.checkBody('body', 'Body must be between 4 to 1000 characters').isLength({
+        min: 4,
         max: 1000
     });
 

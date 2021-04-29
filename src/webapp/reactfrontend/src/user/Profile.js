@@ -6,6 +6,7 @@ import defaultImage from '../images/default_profile_image.png';
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
+import {allPostsByUser} from "../post/apiPost";
 
 class Profile extends Component
 {
@@ -15,7 +16,8 @@ class Profile extends Component
             user: {following: [], followers: []},
             redirectToSignin: false, //when the user is not loggedin
             following: false, // by default not following
-            error: ""
+            error: "",
+            posts: []
         };
     }
 
@@ -45,6 +47,16 @@ class Profile extends Component
         }); // end of callApi method
     }
 
+    //load posts to populate posts by calling allPostsById method of apiPosts.js
+    loadPosts = (userId) => {
+        const token= isAuthenticated().token;
+        allPostsByUser(userId, token).then(data => {
+            if(data.error)
+                console.log(data.error);
+            else
+                this.setState({posts: data});
+        })
+    }// end of loadPosts method
 
     init = userId => {
         //passing the userId passed from componentDidMount method
@@ -56,6 +68,7 @@ class Profile extends Component
                 {
                     let following= this.checkFollow(data);
                     this.setState({user: data, following: following});
+                    this.loadPosts(data._id); // calling allPostsById with user id
                 }
             });
     }
@@ -76,7 +89,7 @@ class Profile extends Component
     } //end of componentDidMount method
 
     render(){
-        const {redirectToSignin, user} = this.state;
+        const {redirectToSignin, user, posts} = this.state;
         if(redirectToSignin) // if true, then we have to sign in
             return <Redirect to="/signin" />
         const photoUrl= user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : defaultImage;
@@ -84,12 +97,12 @@ class Profile extends Component
             <div className="container">
                 <h2 className="mt-5 mb-5">profile</h2>
                 <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <img src={photoUrl} style={{height: "200px", width: "auto"}}
                              onError={i => (i.target.src= `${defaultImage}`)}
                              className="img-thumbnail" alt={user.name}/>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-8">
                         <div className="lead mt-2">
                             <p style={{color: "brown", fontSize: "40px"}}>{user.name}</p>
                             <p>Email: {user.email}</p>
@@ -97,6 +110,11 @@ class Profile extends Component
                         </div>
                         {isAuthenticated().user && isAuthenticated().user._id===user._id ? (
                             <div className="d-inline-block">
+                                <Link className="btn btn-raised btn-info mr-5"
+                                      to={`/create/post`}
+                                >
+                                    Create Post
+                                </Link>
                                 <Link className="btn btn-raised btn-success mr-5"
                                       to={`/user/edit/${user._id}`}
                                 >
@@ -116,7 +134,10 @@ class Profile extends Component
                         <p className="lead">{user.about}</p>
                         <hr/>
 
-                        <ProfileTabs followers={user.followers} following={user.following} />
+                        <ProfileTabs followers={user.followers}
+                                     following={user.following}
+                                     posts={posts}
+                        />
                     </div>
                 </div>
 

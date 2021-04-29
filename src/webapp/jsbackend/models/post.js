@@ -10,9 +10,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    photo:{
-        type: Buffer,
-        contentType: String
+    photo: {
+        data: Buffer,
+        contentType: String,
+        default: {}
     },
     postedBy:{
         type: ObjectId,
@@ -21,7 +22,8 @@ const postSchema = new mongoose.Schema({
     created:{
         type: Date,
         default: Date.now()
-    }
+    },
+    update: Date
 });
 
 //creating model with mongoose and naming it as post_schema and exporting it

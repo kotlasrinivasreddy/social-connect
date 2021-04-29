@@ -3,12 +3,12 @@ const express= require('express');
 
 const {signup, signin, signout} = require('../controller/auth');
 const {userById} = require('../controller/user');
-const validator= require('../validators/validate_fields')
+const {userSignUpValidator}= require('../validators/validate_fields')
 const router= express.Router();
 //using express router we can do request routing of get post or any other method
 //kind of middleware using routes
 
-router.post('/signup', validator.userSignUpValidator, signup);
+router.post('/signup', userSignUpValidator, signup);
 router.post('/signin', signin);
 router.get('/signout', signout); //get request as we don't post anything while logging out.
 

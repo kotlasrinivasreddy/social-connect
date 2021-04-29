@@ -73,6 +73,7 @@ class EditProfile extends Component {
     //curried function -- on calling function with one parameter name it will return another function
     // which requires event as input and sets the state
     handleChange = name => event => {
+        this.setState({error: ""}); //making error print inactive on front end
         let value = (name === "photo" ? event.target.files[0] : event.target.value);
         const photoSize= name === "photo"? event.target.files[0].size: 0 ;
         if(name === "password" && name.length===0)//if password length is 0,then update without password
