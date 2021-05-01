@@ -1,5 +1,6 @@
 
 const express= require('express');
+const {deleteUserIncludingPosts} = require("../controller/user");
 const {requireSignin} = require('../controller/auth');
 const {userById, allUsers, getSingleUser, updateUser, deleteUser, userPhoto,
         addFollowing, addFollower, removeFollowing, removeFollower, findPeople} = require('../controller/user');
@@ -17,6 +18,8 @@ router.get('/getSingleUser/:userId', requireSignin, getSingleUser); //get single
 //to update the user given the userId -- we use put method for updation -- requires signin
 router.put('/updateUser/:userId', requireSignin, updateUser);
 router.delete('/deleteUser/:userId', requireSignin, deleteUser);
+//delete user including posts
+router.delete('/deleteUserIncludingPosts/:userId', requireSignin, deleteUserIncludingPosts);
 //photo route
 router.get("/user/photo/:userId", userPhoto);
 

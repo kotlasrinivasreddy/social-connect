@@ -13,6 +13,8 @@ exports.postById = (req, res, next, id) => {
 	//model_post.find(id)
 	model_post.find({_id: id})
 		.populate("postedBy", "_id name")
+		.populate("comments", 'text created  postedBy')
+		.populate("comments.postedBy", '_id name')
 		.exec((error, post) => {
 			if(error || !post[0]) //post will be array of single object
 				return res.status(400).json({
@@ -29,11 +31,16 @@ exports.postById = (req, res, next, id) => {
 exports.getPosts = (req, res) => {
 	//model_post refers to the post collection in the database
 	//find() method gets all the documents from the database
+	console.log("printing back end get posts");
 	 const posts= model_post.find()
 		 .populate("postedBy", "_id name")
-		 .select("_id title body created")
+		 //.populate('comments', 'text created postedBy')
+		 //.populate('comments.postedBy', '_id name')
+		 .select("_id title body created likes")
 		 .sort({created: -1}) // -1 to sort on reverse order of created date
 		 .then((posts) => {
+		 	console.log(posts);
+		 	console.log(JSON.stringify(posts));
 		 	res.json(posts);
 		 })
 		 .catch(err => console.log(err));
@@ -85,6 +92,7 @@ exports.getPostsByUser = (req, res) => {
 	//otherwise we can use select if they are simple fields
 	model_post.find({postedBy: req.profile._id})
 		.populate("postedBy", "_id name")
+		.select("_id title body created likes")
 		.sort("created")
 		.exec( (error, posts) => {
 			if(error)
@@ -187,3 +195,63 @@ exports.singlePost= (req, res) => {
 	//Here we just need to grab that post
 	return res.json(req.post[0]);
 } // end of singlePost method
+
+//like and unlike methods
+exports.like= (req, res) => {
+	//find post by using postId and update the likes object by adding new userId who has liked the post
+	// new : true to get the updated record from database
+	model_post.findByIdAndUpdate(req.body.postId, {$push: {likes: req.body.userId}},
+		{new: true}).exec((error, result) =>{
+			if(error)
+				return res.status(400).json(error);
+			else
+				res.json(result);
+	})
+}; // end of like method
+
+exports.unlike= (req, res) => {
+	//find post by using postId and update the likes object by remove new userId who has disliked the post
+	// new : true to get the updated record from database
+	model_post.findByIdAndUpdate(req.body.postId, {$pull: {likes: req.body.userId}},
+		{new: true}).exec((error, result) =>{
+		if(error)
+			return res.status(400).json(error);
+		else
+			res.json(result);
+	})
+}; // end of unlike method
+
+// code for comment and uncomment
+exports.comment= (req, res) => {
+	//find post by using postId and update the comment object by adding new userId who has commented on the post
+	// new : true to get the updated record from database
+	let comment= req.body.comment;
+	comment.postedBy= req.body.userId;
+	model_post.findByIdAndUpdate(req.body.postId, {$push: {comments: comment}},
+		{new: true})
+		.populate('comments.postedBy', '_id name')
+		.populate('postedBy', '_id name')
+		.exec((error, result) =>{
+		if(error)
+			return res.status(400).json(error);
+		else
+			res.json(result);
+	})
+}; // end of comment method
+
+exports.uncomment= (req, res) => {
+	//find post by using postId and update the likes object by removing new userId who has uncommented on the post
+	// new : true to get the updated record from database
+	let comment= req.body.comment;
+	model_post.findByIdAndUpdate(req.body.postId, {$pull: {comments: {_id: comment._id}}},
+		{new: true})
+		.populate('comments.postedBy', '_id name')
+		.populate('postedBy', '_id name')
+		.exec((error, result) =>{
+		if(error)
+			return res.status(400).json(error);
+		else
+			res.json(result);
+	})
+}; // end of uncomment method
+

@@ -5,12 +5,13 @@ import defaultImage from '../images/default_profile_image.png';
 class ProfileTabs extends Component {
     render() {
         const {followers, following, posts}= this.props
+        console.log(posts);
         return (
             <div>
                 <div className="row">
 
                     <div className="col-md-4">
-                        <h3 className="text-primary">Followers</h3>
+                        <h3 className="text-primary">{followers.length} Followers</h3>
                         <hr/>
                         {followers.map( (person, index) => (
                             <div key={index}>
@@ -33,7 +34,7 @@ class ProfileTabs extends Component {
                     </div>
 
                     <div className="col-md-4">
-                        <h3 className="text-primary">Following</h3>
+                        <h3 className="text-primary">{following.length} Following</h3>
                         <hr/>
                         {following.map( (person, index) => (
                             <div key={index}>
@@ -55,8 +56,9 @@ class ProfileTabs extends Component {
                         ))}
                     </div>
 
+
                     <div className="col-md-4">
-                        <h3 className="text-primary">Posts</h3>
+                        <h3 className="text-primary">{posts.length} Posts</h3>
                         <hr/>
                         {posts.map( (post, index) => (
                             <div key={index}>

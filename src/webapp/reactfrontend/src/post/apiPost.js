@@ -32,7 +32,7 @@ export const list = () => {
 }; // end of list method
 
 export const singlePost = (postId) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}?${new Date().getTime()}`, {
         method: "GET",
     })
         .then(response => {   // this converts the response to json
@@ -95,3 +95,77 @@ export const update = (postId, token, post) => {
             console.log(error);
         })
 }; // end of update method
+
+//like and unlike front end code
+export const like = (userId, token, postId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/like`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", //make sure we don't have content type as this is form data
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+};
+
+export const unlike = (userId, token, postId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/unlike`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", //make sure we don't have content type as this is form data
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+};
+
+//comment and uncomment front end code
+export const comment = (userId, token, postId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/comment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", //make sure we don't have content type as this is form data
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId, comment})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+};
+
+export const uncomment = (userId, token, postId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/uncomment`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", //make sure we don't have content type as this is form data
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId, comment})
+    })
+        .then(response => {   // this converts the response to json
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+};

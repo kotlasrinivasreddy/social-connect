@@ -51,6 +51,9 @@ class Profile extends Component
     loadPosts = (userId) => {
         const token= isAuthenticated().token;
         allPostsByUser(userId, token).then(data => {
+            console.log("printing all posts by user inside loadPosts method Profile.js line 54");
+            console.log(data);
+            console.log(JSON.stringify(data));
             if(data.error)
                 console.log(data.error);
             else

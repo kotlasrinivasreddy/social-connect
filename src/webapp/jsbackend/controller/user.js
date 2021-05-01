@@ -3,6 +3,7 @@ const _ = require('lodash'); //general syntax is referring lodash by _ (undersco
 const User= require('../models/user'); //user model class containing schema and methods on schema
 const formidable= require('formidable');
 const fs= require('fs');
+const model_post= require('../models/post');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id)
@@ -134,6 +135,43 @@ exports.deleteUser = (req, res) => {
     });
 
 };// end of deleteUser method
+
+//method to delete user including his posts
+exports.deleteUserIncludingPosts = (req, res) => {
+    //when we provide userId in the request url, automatically userById method will be executed and
+    // attaches the user info from database as the profile field
+    let user = req.profile;
+    const all_posts_of_user = model_post.find({postedBy: req.profile._id})
+        .populate("postedBy", "_id name")
+        .select("_id title body created likes")
+        .sort("created")
+        .exec( (error, posts) => {
+            if(error)
+                return res.status(400).json(error);
+            res.json(posts);
+        });
+    console.log("printing all posts of particular user", JSON.stringify(all_posts_of_user[0]));
+    return res.json("testing deletion including posts");
+    // user.remove( (error, deletedUser) => {
+    //     if(error)
+    //         return res.status(400).json({
+    //             error: error
+    //         });
+    //     // req.profile.hashed_password = undefined;
+    //     // req.profile.salt = undefined;
+    //     // req.profile.__v = undefined;
+    //     // res.json({deletedUser}); //generally we shouldn't show the deleted user
+    //     res.json({message: "user account deleted successfully"});
+    //});
+
+};// end of deleteUser including posts method
+
+
+
+
+
+
+
 
 // methods for implementing follow and unfollow
 exports.addFollowing = (req, res, next) => {

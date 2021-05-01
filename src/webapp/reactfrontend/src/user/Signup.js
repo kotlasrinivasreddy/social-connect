@@ -11,7 +11,8 @@ class Signup extends Component {
             email: "",
             password: "",
             error: "",
-            open: false  // initially no error
+            open: false,  // initially no error
+            recaptcha: false
         };
     } // end of constructor
     //curried function -- on calling function with one parameter name it will return another function
@@ -21,6 +22,40 @@ class Signup extends Component {
         this.setState({open: false}); //to deactivate the div element once user starts signup again
         this.setState({[name]: event.target.value});
     };
+
+    recaptchaHandler = event => {
+        this.setState({ error: "" });
+        let userDay = event.target.value.toLowerCase();
+        console.log("inside recaptchaHandler method", userDay);
+        let dayCount;
+        if (userDay === "sunday")
+            dayCount = 0;
+        else if (userDay === "monday")
+            dayCount = 1;
+        else if (userDay === "tuesday")
+            dayCount = 2;
+        else if (userDay === "wednesday")
+            dayCount = 3;
+        else if (userDay === "thursday")
+            dayCount = 4;
+        else if (userDay === "friday")
+            dayCount = 5;
+        else if (userDay === "saturday")
+            dayCount = 6;
+
+        if (dayCount === (new Date().getDay()+2)%7 )
+        {
+            this.setState({ recaptcha: true });
+            return true;
+        }
+        else
+        {
+            this.setState({
+                recaptcha: false
+            });
+            return false;
+        }
+    }; //end of recaptchaHandler method
 
     //onClickSubmit will get an event upon clicking
     onClickSubmit = event => {
@@ -33,8 +68,10 @@ class Signup extends Component {
             password
         };
         //console.log(user);
-        signup(user).then(data => {
-                if(data.error)
+        //if captch validates then make signup request
+        if (this.state.recaptcha) {
+            signup(user).then(data => {
+                if (data.error)
                     this.setState({error: data.error});
                 else //clearing the object of state -- old values to empty string
                     this.setState({
@@ -45,13 +82,21 @@ class Signup extends Component {
                         open: true //on successful user creation. to activate div element to show in frontend
                     });
             });
+        }
+        else
+        {
+            this.setState({
+                loading: false,
+                error: "What day is tomorrow's next day? Please write a correct answer!"
+            });
+        }
     }; // end of onClickSubmit method
 
 
 
 
     //code refactoring -- moving form from render method to here
-    signUpForm = (name, email, password) => (
+    signUpForm = (name, email, password, recaptcha) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Name</label>
@@ -65,6 +110,19 @@ class Signup extends Component {
                 <label className="text-muted">Password</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password}></input>
             </div>
+
+            <div className="form-group">
+                <label className="text-muted">
+                    {recaptcha ? "Thanks. You got it!" : "What day is tomorrow's next day?"}
+                </label>
+
+                <input
+                    onChange={this.recaptchaHandler}
+                    type="text"
+                    className="form-control"
+                />
+            </div>
+
             <button onClick={this.onClickSubmit} className="btn btn-raised btn-primary">submit</button>
 
         </form>
@@ -74,7 +132,7 @@ class Signup extends Component {
     //once there is some change in (name, email, password} fields they get populated we can
     // store it in value
     render() {
-        const {name, email, password, error, open} = this.state;
+        const {name, email, password, error, open, recaptcha} = this.state;
         return(
             <div className="container">
                 <h2 className="mt-5 mb-5">signup</h2>
@@ -84,7 +142,7 @@ class Signup extends Component {
                 <div className="alert alert-info" style={{display: open? "":"none"}}>
                     user account created. Use email and password to <Link to="/signin">Signin</Link>.
                 </div>
-                {this.signUpForm(name, email, password)}
+                {this.signUpForm(name, email, password, recaptcha)}
             </div>
         );
     }

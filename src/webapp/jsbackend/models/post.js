@@ -23,7 +23,16 @@ const postSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    update: Date
+    update: Date,
+    likes: [{type: ObjectId, ref: "user_schema"}], //list with type and ref of that type
+    comments: [
+        {
+            text: String,
+            created: {type: Date, default: Date.now()},
+            postedBy: {type: ObjectId, ref: "user_schema"}
+        }
+    ]
+
 });
 
 //creating model with mongoose and naming it as post_schema and exporting it

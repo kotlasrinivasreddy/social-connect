@@ -21,6 +21,13 @@ const Menu = ({history}) => (
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(history, "/users")} to="/users">Users</Link>
             </li>
+            <li className="nav-item">
+                <Link to="/create/post"
+                      style={isActive(history, `/create/post`)}
+                      className="nav-link">
+                    create new post
+                </Link>
+            </li>
             {/*
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(history, "/posts")} to="/posts">Posts</Link>
@@ -53,14 +60,6 @@ const Menu = ({history}) => (
                               style={isActive(history, `/findPeople`)}
                               className="nav-link">
                             Find people
-                        </Link>
-                    </li>
-
-                    <li className="nav-item">
-                        <Link to="/create/post"
-                              style={isActive(history, `/create/post`)}
-                              className="nav-link">
-                            create new post
                         </Link>
                     </li>
 
