@@ -22,12 +22,22 @@ exports.userById = (req, res, next, id) => {
     });
 } //end of userById method
 
-exports.hasAuthorization = (req, res) => {
-    const authorized = req.profile && req.auth && req.profile._id === req.auth._id;
+exports.hasAuthorization = (req, res, next) => {
+    //req.auth._id is string , where as req.profile._id is not ... so using == make auto conversions
+    let actualUser = req.profile && req.auth && req.profile._id == req.auth._id;
+    //console.log("printing req.profile ", req.profile);
+    //console.log("printing req.auth", req.auth);
+    //console.log("actual user ", actualUser);
+    let adminUser= req.profile && req.auth && req.auth.role === "admin";
+    //console.log("admin user ", adminUser);
+    const authorized = actualUser || adminUser;
+    //console.log("inside hasAuthorization ", authorized);
     if(!authorized)
         return res.status(403).json({
             message: "user is not authorized to access or perform this action"
         });
+
+    next();
 };
 
 //method to get all users
@@ -41,7 +51,7 @@ exports.allUsers = (req, res, next) => {
         //if no errors then
         res.json(users);
         next();
-    }).select("name email created updated");
+    }).select("name email created updated role");
 
 }; // end of allUsers method
 
@@ -59,12 +69,15 @@ exports.getSingleUser = (req, res) => {
 
 //method for user information/profile update  -- rewriting to handle form data
 exports.updateUser = (req, res) => {
+    //console.log("inside upate user");
     let form= new formidable.IncomingForm();
     form.keepExtensions= true;
     form.parse( req, (error, fields, files) => {
         if(error)
             return res.status(400).json({error: "problems while uploading profile pic"});
         //saving user
+        //discouraging all users to update themselves as "admin" from postman or similar tools by sending requests
+        delete fields.role;
         let user= req.profile;
         user= _.extend(user, fields);
         user.updated= Date.now();
@@ -150,7 +163,7 @@ exports.deleteUserIncludingPosts = (req, res) => {
                 return res.status(400).json(error);
             res.json(posts);
         });
-    console.log("printing all posts of particular user", JSON.stringify(all_posts_of_user[0]));
+    //console.log("printing all posts of particular user", JSON.stringify(all_posts_of_user[0]));
     return res.json("testing deletion including posts");
     // user.remove( (error, deletedUser) => {
     //     if(error)

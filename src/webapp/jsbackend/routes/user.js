@@ -2,7 +2,7 @@
 const express= require('express');
 const {deleteUserIncludingPosts} = require("../controller/user");
 const {requireSignin} = require('../controller/auth');
-const {userById, allUsers, getSingleUser, updateUser, deleteUser, userPhoto,
+const {userById, allUsers, getSingleUser, updateUser, deleteUser, userPhoto, hasAuthorization,
         addFollowing, addFollower, removeFollowing, removeFollower, findPeople} = require('../controller/user');
 const router= express.Router();
 //using express router we can do request routing of get post or any other method
@@ -16,8 +16,8 @@ router.get('/getAllUsers', allUsers); //get allUsers
 //make it secure access by checking signin
 router.get('/getSingleUser/:userId', requireSignin, getSingleUser); //get single user --path uri param
 //to update the user given the userId -- we use put method for updation -- requires signin
-router.put('/updateUser/:userId', requireSignin, updateUser);
-router.delete('/deleteUser/:userId', requireSignin, deleteUser);
+router.put('/updateUser/:userId', requireSignin, hasAuthorization, updateUser);
+router.delete('/deleteUser/:userId', requireSignin, hasAuthorization, deleteUser);
 //delete user including posts
 router.delete('/deleteUserIncludingPosts/:userId', requireSignin, deleteUserIncludingPosts);
 //photo route

@@ -51,9 +51,7 @@ class Profile extends Component
     loadPosts = (userId) => {
         const token= isAuthenticated().token;
         allPostsByUser(userId, token).then(data => {
-            console.log("printing all posts by user inside loadPosts method Profile.js line 54");
-            console.log(data);
-            console.log(JSON.stringify(data));
+            //console.log("printing all posts by user inside loadPosts method Profile.js line 54");
             if(data.error)
                 console.log(data.error);
             else
@@ -93,6 +91,7 @@ class Profile extends Component
 
     render(){
         const {redirectToSignin, user, posts} = this.state;
+        //console.log("inside profile.js printing user.followers", user.followers);
         if(redirectToSignin) // if true, then we have to sign in
             return <Redirect to="/signin" />
         const photoUrl= user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : defaultImage;
@@ -129,6 +128,30 @@ class Profile extends Component
                                 following={this.state.following}
                                 onButtonClick={this.clickFollowButton} />)
                         }
+
+                        <div>
+                            {isAuthenticated().user &&
+                            isAuthenticated().user.role === "admin" && (
+                                <div className="card mt-5">
+                                    <div className="card-body">
+                                        <h5 className="card-title">
+                                            Admin
+                                        </h5>
+                                        <p className="mb-2 text-danger">
+                                            Edit/Delete as an Admin
+                                        </p>
+                                        <Link
+                                            className="btn btn-raised btn-success mr-5"
+                                            to={`/user/edit/${user._id}`}
+                                        >
+                                            Edit Profile
+                                        </Link>
+                                        <DeleteUser userId={user._id}/>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                 </div>
                 <div className="row">

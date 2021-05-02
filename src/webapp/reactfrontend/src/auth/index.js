@@ -19,7 +19,7 @@ export const signup = user => {
 export const signin = user => {
     //now we need to make post request to /signin method in the backend
     // we can use axios or fetch
-    console.log(`${process.env.REACT_APP_API_URL}/signin`);
+    //console.log(`${process.env.REACT_APP_API_URL}/signin`);
     return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
         method: "POST",
         headers: {
@@ -75,7 +75,7 @@ export const isAuthenticated = () => {
 
 //forgot-password and reset-password methods to invoke back end api calls
 export const forgotPassword = email => {
-    console.log("email: ", email);
+    //console.log("email: ", email);
     return fetch(`${process.env.REACT_APP_API_URL}/forgot-password/`, {
         method: "PUT",
         headers: {

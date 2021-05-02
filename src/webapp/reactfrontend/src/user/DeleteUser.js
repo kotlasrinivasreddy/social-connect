@@ -7,7 +7,8 @@ import {Redirect} from "react-router-dom";
 class DeleteUser extends Component {
 
     state= {
-            redirectTo: false // we just need  one variable to save redirect
+            redirectToHome: false, // we just need  one variable to save redirect
+            redirectToAdminProfilePage: false
     }; // end of state
 
     deleteAccount= () => {
@@ -16,14 +17,19 @@ class DeleteUser extends Component {
         const userId= this.props.userId;//userId passed from Profile.js while invoking DeleteUser component
         remove(userId, token)
             .then(data => {
+                //console.log("inside DeleteUser line 22 isAuthenticated().user.role:", isAuthenticated().user.role);
+                //console.log("inside DeleteUser line 22 isAuthenticated().user._id:", isAuthenticated().user._id, userId);
                 if(data.error)
                     console.log(data.error);
+                //if admin is deleting && not deleting himself then no need to signout
+                else if(isAuthenticated().user.role === "admin" && isAuthenticated().user._id !== userId)
+                    this.setState({redirectToAdminProfilePage: true});
                 else
                 {
                     //signout method takes function as argument--see next function in the signout declaration
                     signout(() => console.log("user profile deleted"));
                     //redirect
-                    this.setState({redirectTo: true});
+                    this.setState({redirectToHome: true});
                 }
             })
     }; // end of deleteAccount method
@@ -36,8 +42,10 @@ class DeleteUser extends Component {
     };// end of deleteConfirmed method
 
     render() {
-        if(this.state.redirectTo) // redirect to home page
+        if(this.state.redirectToHome) // redirect to home page
             return <Redirect to="/" />
+        if(this.state.redirectToAdminProfilePage)
+            return <Redirect to="/admin" />
         return (
             <button onClick={this.deleteConfirmed} className="btn btn-raised btn-danger">
                 Delete Profile

@@ -87,7 +87,7 @@ class SinglePost extends Component {
         //console.log("inside render post..printing postedBy id", post.postedBy); //gives error for unknown posts
 
         const posted_user_id = post.postedBy ? `/user/${post.postedBy._id}` : ""; // id of person who has posted
-        console.log("inside renderPost posted user id is ", posted_user_id);
+        //console.log("inside renderPost posted user id is ", posted_user_id);
         const posted_user_name = post.postedBy ? post.postedBy.name : "unknown"; // name of person who has posted
         const {liked, likes}= this.state;
         //we use above 2 variables to create a link to the user profile
@@ -135,6 +135,33 @@ class SinglePost extends Component {
                         </>
                         )
                     }
+
+                    <div>
+                        {isAuthenticated().user &&
+                        isAuthenticated().user.role === "admin" && (
+                            <div className="card mt-2">
+                                <div className="card-body">
+                                    <h5 className="card-title">Admin</h5>
+                                    <p className="mb-2 text-danger">
+                                        Edit/Delete as an Admin
+                                    </p>
+                                    <Link
+                                        to={`/post/edit/${post._id}`}
+                                        className="btn btn-raised btn-info mr-2"
+                                    >
+                                        Update Post
+                                    </Link>
+                                    <button
+                                        onClick={this.deleteConfirmed}
+                                        className="btn btn-raised btn-warning"
+                                    >
+                                        Delete Post
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                 </div>
             </div>
 

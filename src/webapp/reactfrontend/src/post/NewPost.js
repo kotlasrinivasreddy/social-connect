@@ -67,7 +67,7 @@ class NewPost extends Component {
                     this.setState({error: data.error});
                 else
                 {
-                    console.log("New post: ", data);
+                    //console.log("New post: ", data);
                     this.setState({      //resetting all the fields
                         loading: false,
                         title: "",

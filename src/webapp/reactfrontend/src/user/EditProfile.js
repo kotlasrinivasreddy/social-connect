@@ -96,6 +96,12 @@ class EditProfile extends Component {
             update(userId, token, this.userData).then(data => {
                 if(data.error)
                     this.setState({error: data.error});
+                //need not updated localStorage while editing as admin
+                else if (isAuthenticated().user.role === "admin") {
+                    this.setState({
+                        redirectToProfile: true
+                    });
+                }
                 else //clearing the object of state -- old values to empty string
                     //data -- we get entire updated user info from back end api call as response
                     updateUser(data, () => {

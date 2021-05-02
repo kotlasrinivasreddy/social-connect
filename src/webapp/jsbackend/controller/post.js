@@ -12,7 +12,7 @@ exports.postById = (req, res, next, id) => {
 	//console.log("inside postById method and id is: " + id);
 	//model_post.find(id)
 	model_post.find({_id: id})
-		.populate("postedBy", "_id name")
+		.populate("postedBy", "_id name role")
 		.populate("comments", 'text created  postedBy')
 		.populate("comments.postedBy", '_id name')
 		.exec((error, post) => {
@@ -31,7 +31,7 @@ exports.postById = (req, res, next, id) => {
 exports.getPosts = (req, res) => {
 	//model_post refers to the post collection in the database
 	//find() method gets all the documents from the database
-	console.log("printing back end get posts");
+	///console.log("printing back end get posts");
 	 const posts= model_post.find()
 		 .populate("postedBy", "_id name")
 		 //.populate('comments', 'text created postedBy')
@@ -39,8 +39,6 @@ exports.getPosts = (req, res) => {
 		 .select("_id title body created likes")
 		 .sort({created: -1}) // -1 to sort on reverse order of created date
 		 .then((posts) => {
-		 	console.log(posts);
-		 	console.log(JSON.stringify(posts));
 		 	res.json(posts);
 		 })
 		 .catch(err => console.log(err));
@@ -53,7 +51,7 @@ exports.createPost = (req, res, next) => {
 	let form= new formidable.IncomingForm();
 	form.keepExtensions = true; //we want keep the extension intact
 	form.parse(req, (error, fields, files) => {
-		console.log("inside the parse method");
+		//console.log("inside the parse method");
 		if(error) {
 			//console.log("inside error if condition");
 			return res.status(400).json({
@@ -106,14 +104,16 @@ exports.isPoster = (req, res, next) => {
 	//req.post is an array of objects..normally accessing req.post.postedBy gives undefined object
 	//console.log("printing req.post: "+ JSON.stringify(req.post[0]));
 	//console.log("printing req.auth: "+ JSON.stringify(req.auth._id));
-	let isPoster = req.post[0] && req.auth && req.post[0].postedBy._id.toString() === req.auth._id.toString();
+	let actualUser= req.post[0] && req.auth && req.post[0].postedBy._id.toString() === req.auth._id.toString();
+	let adminUser= req.post[0] && req.auth && req.auth.role === "admin";
+	let isPoster = actualUser || adminUser;
 	//console.log("isPoster value: "+ isPoster);
 	if(!isPoster)
 		return res.status(403).json({
 			error: "User is not authorized to do this action"
 		});
 	next(); //let the application flow to the next middleware
-};
+}; // end of isPoster method
 
 exports.deletePostById = (req, res) => {
 	//console.log("inside deletePostById method");

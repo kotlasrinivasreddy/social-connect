@@ -49,12 +49,12 @@ exports.signin = (req, res) => {
         }
         //generate a token with user_id(email) and secret
         //creating token with jwt secret, _id (which will be generated uniquely in mongodb database)
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+        const token = jwt.sign({_id: user._id, role: user.role }, process.env.JWT_SECRET);
         //persist the token as 'token_name' in cookie with expiry date
         res.cookie("token", token, {expire: new Date() +10000});//expire 10000 seconds from current time
         //return response with user and token to the front end
-        const {_id, name, email}= user; //object destructuring
-        return res.json({token, user: {_id, email, name}});
+        const {_id, name, email, role}= user; //object destructuring
+        return res.json({token, user: {_id, email, name, role}});
 
 
     }); // end of User.findOne

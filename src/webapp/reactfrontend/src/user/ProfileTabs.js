@@ -5,7 +5,6 @@ import defaultImage from '../images/default_profile_image.png';
 class ProfileTabs extends Component {
     render() {
         const {followers, following, posts}= this.props
-        console.log(posts);
         return (
             <div>
                 <div className="row">

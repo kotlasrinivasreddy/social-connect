@@ -12,7 +12,8 @@ class Signup extends Component {
             password: "",
             error: "",
             open: false,  // initially no error
-            recaptcha: false
+            recaptcha: false,
+            passwordConfirm: ""
         };
     } // end of constructor
     //curried function -- on calling function with one parameter name it will return another function
@@ -23,10 +24,15 @@ class Signup extends Component {
         this.setState({[name]: event.target.value});
     };
 
+    confirmPasswordHandler= () => {
+        this.setState({error: ""});
+        return this.state.password===this.state.passwordConfirm;
+    } // end of confirmPasswordHandler
+
     recaptchaHandler = event => {
         this.setState({ error: "" });
         let userDay = event.target.value.toLowerCase();
-        console.log("inside recaptchaHandler method", userDay);
+        //console.log("inside recaptchaHandler method", userDay);
         let dayCount;
         if (userDay === "sunday")
             dayCount = 0;
@@ -69,7 +75,7 @@ class Signup extends Component {
         };
         //console.log(user);
         //if captch validates then make signup request
-        if (this.state.recaptcha) {
+        if (this.confirmPasswordHandler() && this.state.recaptcha ) {
             signup(user).then(data => {
                 if (data.error)
                     this.setState({error: data.error});
@@ -78,6 +84,7 @@ class Signup extends Component {
                         name: "",
                         email: "",
                         password: "",
+                        passwordConfirm: "",
                         error: "",
                         open: true //on successful user creation. to activate div element to show in frontend
                     });
@@ -85,9 +92,12 @@ class Signup extends Component {
         }
         else
         {
+            //console.log("password checking ", this.confirmPasswordHandler());
             this.setState({
                 loading: false,
-                error: "What day is tomorrow's next day? Please write a correct answer!"
+                error: this.confirmPasswordHandler() ?
+                    "What day is tomorrow's next day? Please write a correct answer!" :
+                    "Password and Confirm Password should match.Please enter the password again!"
             });
         }
     }; // end of onClickSubmit method
@@ -96,7 +106,7 @@ class Signup extends Component {
 
 
     //code refactoring -- moving form from render method to here
-    signUpForm = (name, email, password, recaptcha) => (
+    signUpForm = (name, email, password, passwordConfirm, recaptcha) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Name</label>
@@ -110,6 +120,12 @@ class Signup extends Component {
                 <label className="text-muted">Password</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password}></input>
             </div>
+
+            <div className="form-group">
+                <label className="text-muted">Confirm Password</label>
+                <input onChange={this.handleChange("passwordConfirm")} type="password" className="form-control" value={passwordConfirm} />
+            </div>
+
 
             <div className="form-group">
                 <label className="text-muted">
@@ -132,7 +148,7 @@ class Signup extends Component {
     //once there is some change in (name, email, password} fields they get populated we can
     // store it in value
     render() {
-        const {name, email, password, error, open, recaptcha} = this.state;
+        const {name, email, password, passwordConfirm, error, open, recaptcha} = this.state;
         return(
             <div className="container">
                 <h2 className="mt-5 mb-5">signup</h2>
@@ -142,7 +158,7 @@ class Signup extends Component {
                 <div className="alert alert-info" style={{display: open? "":"none"}}>
                     user account created. Use email and password to <Link to="/signin">Signin</Link>.
                 </div>
-                {this.signUpForm(name, email, password, recaptcha)}
+                {this.signUpForm(name, email, password, passwordConfirm, recaptcha)}
             </div>
         );
     }
