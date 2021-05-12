@@ -1,5 +1,7 @@
 
-
+// load env variables
+const dotenv = require('dotenv');
+dotenv.config();
 const express= require('express');
 const app= express();
 const morgan = require('morgan');
@@ -12,9 +14,6 @@ const cookieParser= require('cookie-parser');
 const mongoose = require('mongoose');
 const fs= require('fs');
 const cors= require('cors'); // we use this as middleware
-// load env variables
-const dotenv = require('dotenv');
-dotenv.config()
 
 
 //middleware using morgan
