@@ -1,6 +1,8 @@
-const jwt= require('jsonwebtoken');
+
 const dotenv = require('dotenv');
-dotenv.config()
+dotenv.config();
+
+const jwt= require('jsonwebtoken');
 const User= require('../models/user');
 const expressJwt= require('express-jwt');
 const _ = require("lodash");
