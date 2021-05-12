@@ -95,6 +95,7 @@ class Profile extends Component
         if(redirectToSignin) // if true, then we have to sign in
             return <Redirect to="/signin" />
         const photoUrl= user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : defaultImage;
+        //console.log("photoUrl in Profile.js ", photoUrl);
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">profile</h2>
