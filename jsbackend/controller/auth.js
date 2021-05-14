@@ -7,6 +7,7 @@ const User= require('../models/user');
 const expressJwt= require('express-jwt');
 const _ = require("lodash");
 const { sendEmail } = require("../helpers/helperMethods");
+const logger = require("../logging/loggerConfig");
 
 
 exports.signup = async (req, res) => {
@@ -20,6 +21,7 @@ exports.signup = async (req, res) => {
     //if not creating new user with passed email id
     const user = await new User(req.body);
     await user.save();
+    logger.info("signed up successfully - message from winston");
     res.status(200).json({
         success: "successfully created the user",
         message: "please use same username and password to login"
@@ -35,15 +37,18 @@ exports.signin = (req, res) => {
         //if error or no user exists then
         if(error || !user)
         {
+            logger.error("error while finding user in the database - message from winston");
             return res.status(401).json({
                 error: "user with specified email doesn't exist in the database",
                 message: "please signup/create new account "
+
             });
         }
         //if user is found, match email and password with those already in database
         //creating authenticate method in model and using it here
         if(!user.authenticate(password))
         {
+            logger.error("incorrect password provided for signin - message from winston")
             return res.status(401).json({
                 error: "password mismatch",
                 message: "please enter the exact password corresponding the login email"
@@ -51,6 +56,7 @@ exports.signin = (req, res) => {
         }
         //generate a token with user_id(email) and secret
         //creating token with jwt secret, _id (which will be generated uniquely in mongodb database)
+        logger.info("signed in successfully - message from winston");
         const token = jwt.sign({_id: user._id, role: user.role }, process.env.JWT_SECRET);
         //persist the token as 'token_name' in cookie with expiry date
         res.cookie("token", token, {expire: new Date() +10000});//expire 10000 seconds from current time
@@ -65,6 +71,7 @@ exports.signin = (req, res) => {
 
 exports.signout = (req, res) => {
     //to sign out we need to remove/delete the cookie we created while signing in
+    logger.info("Successfully logged out - message from winston");
     res.clearCookie("token"); //there will be no cookie, so user will not be authenticated
     return res.json({message: "successfully logged out"});
     //if we hit from postman, it doesn't clear the cookie as we're not in client side front end
@@ -92,10 +99,12 @@ exports.forgotPassword = (req, res) => {
     User.findOne({ email }, (error, user) => {
         // if err or no user
         if (error || !user)
+        {
+            logger.error(" forgot password: email doesn't exist in the database- message from winston")
             return res.status("401").json({
                 error: "User with that email does not exist!"
             });
-
+        }
         // generate a token with user id and secret
         const token = jwt.sign({ _id: user._id, iss: "Social-Connect" }, process.env.JWT_SECRET);
 
@@ -137,9 +146,12 @@ exports.resetPassword = (req, res) => {
     User.findOne({ resetPasswordLink }, (error, user) => {
         // if error or no user
         if (error || !user)
+        {
+            logger.error("error while resetting the password - message from winston");
             return res.status("401").json({
                 error: "Invalid Link!"
             });
+        }
 
         const updatedFields = {
             password: newPassword,
@@ -152,6 +164,8 @@ exports.resetPassword = (req, res) => {
         user.save((error, result) => {
             if (error)
                 return res.status(400).json({error: error});
+
+            logger.error("password reset successful - message from winston");
             res.json({
                 message: `Great! Now you can login with your new password.`
             });

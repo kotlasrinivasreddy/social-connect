@@ -4,14 +4,18 @@ const User= require('../models/user'); //user model class containing schema and 
 const formidable= require('formidable');
 const fs= require('fs');
 const model_post= require('../models/post');
+const logger = require("../logging/loggerConfig");
 
 exports.userById = (req, res, next, id) => {
+
+    logger.info("inside userById method - message from winston");
     User.findById(id)
         //populate followers and following users' list
         .populate('following', '_id name')
         .populate('followers', '_id name')
         .exec( (error, user) => {
         if(error || !user){
+            logger.error("error while fetching user details inside userById method - message from winston");
             return res.status(400).json({
                 error: "user not found"
             });
@@ -42,8 +46,11 @@ exports.hasAuthorization = (req, res, next) => {
 
 //method to get all users
 exports.allUsers = (req, res, next) => {
+
+    logger.info("inside allUsers method - message from winston");
     User.find( (error, users) => {
         if(error){
+            logger.error("error while fetching allUsers - message from winston");
             return res.status(400).json({
                 error: error
             });
@@ -60,6 +67,8 @@ exports.allUsers = (req, res, next) => {
 //userById method attaches user info as profile field to the request
 // we can send that that profile as json response
 exports.getSingleUser = (req, res) => {
+    logger.info("inside getSingleUser method - message from winston");
+
     //we don't want to print hashed_password, salt, _v
     req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
@@ -70,6 +79,8 @@ exports.getSingleUser = (req, res) => {
 //method for user information/profile update  -- rewriting to handle form data
 exports.updateUser = (req, res) => {
     //console.log("inside upate user");
+    logger.info("inside updateUser method - message from winston");
+
     let form= new formidable.IncomingForm();
     form.keepExtensions= true;
     form.parse( req, (error, fields, files) => {
@@ -123,6 +134,8 @@ exports.updateUser = (req, res) => {
 // }; // end of update user method
 
 exports.userPhoto= (req, res, next) => {
+    logger.info("inside userPhoto method - message from winston");
+
     if(req.profile.photo.data){
         res.set(("Content-Type", req.profile.photo.contentType));
         return res.send(req.profile.photo.data);
@@ -134,6 +147,8 @@ exports.userPhoto= (req, res, next) => {
 exports.deleteUser = (req, res) => {
     //when we provide userId in the request url, automatically userById method will be executed and
     // attaches the user info from database as the profile field
+    logger.info("inside deleteUser method - message from winston");
+
     let user = req.profile;
     user.remove( (error, deletedUser) => {
         if(error)
@@ -189,6 +204,8 @@ exports.deleteUserIncludingPosts = (req, res) => {
 // methods for implementing follow and unfollow
 exports.addFollowing = (req, res, next) => {
     //we get userId(logged in userId) and whom he clicked to follow from front end request
+    logger.info("inside addFollowing method - message from winston");
+
     User.findByIdAndUpdate(req.body.userId, {$push: {following: req.body.followId}},
         (error, result) => {
         if(error)
@@ -218,6 +235,8 @@ exports.addFollower = (req, res, next) => {
 
 
 exports.removeFollowing = (req, res, next) => {
+
+    logger.info("inside removeFollowing method - message from winston");
     //we get userId(logged in userId) and whom he clicked to follow from front end request
     User.findByIdAndUpdate(req.body.userId, {$pull: {following: req.body.unfollowId}},
         (error, result) => {
@@ -228,6 +247,8 @@ exports.removeFollowing = (req, res, next) => {
 } // end of removeFollowing method
 
 exports.removeFollower = (req, res, next) => {
+
+    logger.info("inside removeFollower method - message from winston");
     //add logged in userId to the followId's follower list    new: true to get updated response
     User.findByIdAndUpdate(req.body.unfollowId, {$pull: {followers: req.body.userId}}, {new: true})
         //populating for returning response after executing addFollowing, addFollower
@@ -247,6 +268,8 @@ exports.removeFollower = (req, res, next) => {
 } // end of removeFollower method
 
 exports.findPeople= (req, res) => {
+
+    logger.info("inside findPeople method - message from winston");
     //get all the users whom the current signedin user is following
     let already_following = req.profile.following;
     already_following.push(req.profile._id); // pushing user himself to the aside list

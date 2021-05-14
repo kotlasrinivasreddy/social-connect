@@ -67,7 +67,7 @@ app.listen(process.env.PORT, () => {
 
 //db connection -- db name is "connectDB" if not already present, will be created
 mongoose.connect(process.env.MONGO_URI,
-	{useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('MongoDB Connected'));
+	{useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log('MongoDB Connected....'));
 
 mongoose.connection.on('error', err => {
 	console.log(`Mongo DB connection error: ${err.message}`)

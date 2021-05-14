@@ -4,6 +4,7 @@ const formidable= require('formidable');
 const _ = require('lodash'); //general syntax is referring lodash by _ (underscore)
 const fs= require('fs');  //node js core module file system... it will give us access to fs
 let uuidv1 = require('uuidv1');
+const logger = require("../logging/loggerConfig");
 
 //console.log("printing unique identifier: " + uuidv1())
 //directly exporting the function
@@ -11,6 +12,8 @@ let uuidv1 = require('uuidv1');
 exports.postById = (req, res, next, id) => {
 	//console.log("inside postById method and id is: " + id);
 	//model_post.find(id)
+	logger.info("inside postById method - message from winston");
+
 	model_post.find({_id: id})
 		.populate("postedBy", "_id name role")
 		.populate("comments", 'text created  postedBy')
@@ -32,6 +35,7 @@ exports.getPosts = (req, res) => {
 	//model_post refers to the post collection in the database
 	//find() method gets all the documents from the database
 	///console.log("printing back end get posts");
+	logger.info("inside getPosts method  - message from winston");
 	 const posts= model_post.find()
 		 .populate("postedBy", "_id name")
 		 //.populate('comments', 'text created postedBy')
@@ -48,12 +52,15 @@ exports.createPost = (req, res, next) => {
 	//console.log(JSON.stringify(req.body));
 	//console.log("inside the createPost method");
 	//this package must run before validation, change in routes
+	logger.info("inside createPost method - message from winston");
+
 	let form= new formidable.IncomingForm();
 	form.keepExtensions = true; //we want keep the extension intact
 	form.parse(req, (error, fields, files) => {
 		//console.log("inside the parse method");
 		if(error) {
 			//console.log("inside error if condition");
+			logger.error("error while creating post - message from winston");
 			return res.status(400).json({
 				error: "image could not be uploaded"
 			});
@@ -88,6 +95,8 @@ exports.getPostsByUser = (req, res) => {
 	//finding posts by using postedBy field of the post
 	//we have to use populate method because postedBy is referring to some other schema
 	//otherwise we can use select if they are simple fields
+	logger.info("inside getPostByUser method - message from winston");
+
 	model_post.find({postedBy: req.profile._id})
 		.populate("postedBy", "_id name")
 		.select("_id title body created likes")
@@ -104,14 +113,19 @@ exports.isPoster = (req, res, next) => {
 	//req.post is an array of objects..normally accessing req.post.postedBy gives undefined object
 	//console.log("printing req.post: "+ JSON.stringify(req.post[0]));
 	//console.log("printing req.auth: "+ JSON.stringify(req.auth._id));
+	logger.info("inside isPoster method - message from winston");
+
 	let actualUser= req.post[0] && req.auth && req.post[0].postedBy._id.toString() === req.auth._id.toString();
 	let adminUser= req.post[0] && req.auth && req.auth.role === "admin";
 	let isPoster = actualUser || adminUser;
 	//console.log("isPoster value: "+ isPoster);
 	if(!isPoster)
+	{
+		logger.error("unauthorized access inside isPoster method - message from winston");
 		return res.status(403).json({
 			error: "User is not authorized to do this action"
 		});
+	}
 	next(); //let the application flow to the next middleware
 }; // end of isPoster method
 
@@ -119,6 +133,8 @@ exports.deletePostById = (req, res) => {
 	//console.log("inside deletePostById method");
 	//req.post is an array of objects..normally accessing req.post.postedBy gives undefined object
 	// access as req.post[0]... as we search using post id we get single object in the array
+	logger.info("inside deletePostById - message from winston");
+
 	let post= req.post[0];
 	post.remove( (error, post) => {
 		if(error)
@@ -132,6 +148,8 @@ exports.deletePostById = (req, res) => {
 
 //method for user information/profile update  -- rewriting to handle form data
 exports.updatePostById = (req, res) => {
+
+	logger.info("inside updatePostById - message from winston");
 	let form= new formidable.IncomingForm();
 	form.keepExtensions= true;
 	form.parse( req, (error, fields, files) => {
@@ -182,6 +200,8 @@ exports.updatePostById = (req, res) => {
 exports.postPhoto= (req, res, next) => {
 	//console.log("inside post photo", req.post);
 	//console.log("inside post photo method", req.post[0].photo);
+	logger.info("inside postPhoto method - message from winston");
+
 	if(req.post[0].photo.data){
 		res.set(("Content-Type", req.post[0].photo.contentType));
 		return res.send(req.post[0].photo.data);
@@ -193,6 +213,8 @@ exports.singlePost= (req, res) => {
 	//whenever there is uri param :postId in the request, postById method executes
 	//and provides us with the full post corresponding to postId
 	//Here we just need to grab that post
+	logger.info("inside singlePost method - message from winston");
+
 	return res.json(req.post[0]);
 } // end of singlePost method
 
@@ -200,6 +222,8 @@ exports.singlePost= (req, res) => {
 exports.like= (req, res) => {
 	//find post by using postId and update the likes object by adding new userId who has liked the post
 	// new : true to get the updated record from database
+	logger.info("inside like method - message from winston");
+
 	model_post.findByIdAndUpdate(req.body.postId, {$push: {likes: req.body.userId}},
 		{new: true}).exec((error, result) =>{
 			if(error)
@@ -212,6 +236,8 @@ exports.like= (req, res) => {
 exports.unlike= (req, res) => {
 	//find post by using postId and update the likes object by remove new userId who has disliked the post
 	// new : true to get the updated record from database
+	logger.info("inside unlike method - message from winston");
+
 	model_post.findByIdAndUpdate(req.body.postId, {$pull: {likes: req.body.userId}},
 		{new: true}).exec((error, result) =>{
 		if(error)
@@ -225,6 +251,8 @@ exports.unlike= (req, res) => {
 exports.comment= (req, res) => {
 	//find post by using postId and update the comment object by adding new userId who has commented on the post
 	// new : true to get the updated record from database
+	logger.info("inside comment method - message from winston");
+
 	let comment= req.body.comment;
 	comment.postedBy= req.body.userId;
 	model_post.findByIdAndUpdate(req.body.postId, {$push: {comments: comment}},
@@ -242,6 +270,8 @@ exports.comment= (req, res) => {
 exports.uncomment= (req, res) => {
 	//find post by using postId and update the likes object by removing new userId who has uncommented on the post
 	// new : true to get the updated record from database
+	logger.info("inside uncomment method - message from winston");
+
 	let comment= req.body.comment;
 	model_post.findByIdAndUpdate(req.body.postId, {$pull: {comments: {_id: comment._id}}},
 		{new: true})
