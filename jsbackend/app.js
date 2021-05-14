@@ -56,8 +56,8 @@ app.use(function (err, req, res, next) {
 	}
 });
 
-//const port= 3000
-app.listen(process.env.PORT, () => {
+//const port= 3001
+const server= app.listen(process.env.PORT, () => {
 	console.log("A node js API is listening on port: "+ process.env.PORT)
 
 });
@@ -72,3 +72,5 @@ mongoose.connect(process.env.MONGO_URI,
 mongoose.connection.on('error', err => {
 	console.log(`Mongo DB connection error: ${err.message}`)
 });
+
+module.exports= server;

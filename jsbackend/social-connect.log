@@ -517,3 +517,190 @@
 2021-05-14 08:15:39, info, inside userPhoto method - message from winston
 2021-05-14 08:15:39, info, inside userPhoto method - message from winston
 2021-05-14 08:15:40, info, inside userById method - message from winston
+2021-05-14 11:56:51, info, inside getPosts method  - message from winston
+2021-05-14 11:56:51, info, inside postById method - message from winston
+2021-05-14 11:56:51, info, inside postById method - message from winston
+2021-05-14 11:56:51, info, inside postById method - message from winston
+2021-05-14 11:56:51, info, inside postById method - message from winston
+2021-05-14 11:56:51, info, inside postById method - message from winston
+2021-05-14 11:56:52, info, inside postPhoto method - message from winston
+2021-05-14 11:56:52, info, inside postPhoto method - message from winston
+2021-05-14 11:56:52, info, inside postPhoto method - message from winston
+2021-05-14 11:56:52, info, inside postPhoto method - message from winston
+2021-05-14 11:56:52, info, inside postPhoto method - message from winston
+2021-05-14 11:57:36, error, error while finding user in the database - message from winston
+2021-05-14 11:57:51, error, error while finding user in the database - message from winston
+2021-05-14 11:58:11, error, incorrect password provided for signin - message from winston
+2021-05-14 11:58:34, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:33, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:40, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:40, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:41, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:41, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:41, error, incorrect password provided for signin - message from winston
+2021-05-14 11:59:51, error, error while finding user in the database - message from winston
+2021-05-14 11:59:52, error, error while finding user in the database - message from winston
+2021-05-14 11:59:52, error, error while finding user in the database - message from winston
+2021-05-14 11:59:52, error, error while finding user in the database - message from winston
+2021-05-14 11:59:52, error, error while finding user in the database - message from winston
+2021-05-14 11:59:58, error, error while finding user in the database - message from winston
+2021-05-14 11:59:58, error, error while finding user in the database - message from winston
+2021-05-14 11:59:58, error, error while finding user in the database - message from winston
+2021-05-14 11:59:59, error, error while finding user in the database - message from winston
+2021-05-14 11:59:59, error, error while finding user in the database - message from winston
+2021-05-14 11:59:59, error, error while finding user in the database - message from winston
+2021-05-14 11:59:59, error, error while finding user in the database - message from winston
+2021-05-14 11:59:59, error, error while finding user in the database - message from winston
+2021-05-14 12:00:00, error, error while finding user in the database - message from winston
+2021-05-14 12:00:00, error, error while finding user in the database - message from winston
+2021-05-14 12:00:00, error, error while finding user in the database - message from winston
+2021-05-14 12:00:01, error, error while finding user in the database - message from winston
+2021-05-14 12:00:01, error, error while finding user in the database - message from winston
+2021-05-14 12:00:01, error, error while finding user in the database - message from winston
+2021-05-14 12:00:02, error, error while finding user in the database - message from winston
+2021-05-14 12:00:25, info, signed in successfully - message from winston
+2021-05-14 12:00:25, info, inside getPosts method  - message from winston
+2021-05-14 12:00:25, info, inside postById method - message from winston
+2021-05-14 12:00:25, info, inside postById method - message from winston
+2021-05-14 12:00:25, info, inside postById method - message from winston
+2021-05-14 12:00:25, info, inside postById method - message from winston
+2021-05-14 12:00:25, info, inside postById method - message from winston
+2021-05-14 12:00:25, info, inside postPhoto method - message from winston
+2021-05-14 12:00:25, info, inside postPhoto method - message from winston
+2021-05-14 12:00:25, info, inside postPhoto method - message from winston
+2021-05-14 12:00:25, info, inside postPhoto method - message from winston
+2021-05-14 12:00:25, info, inside postPhoto method - message from winston
+2021-05-14 12:00:28, info, inside postById method - message from winston
+2021-05-14 12:00:28, info, inside postById method - message from winston
+2021-05-14 12:00:28, info, inside postById method - message from winston
+2021-05-14 12:00:28, info, inside postById method - message from winston
+2021-05-14 12:00:28, info, inside postById method - message from winston
+2021-05-14 12:00:28, info, Successfully logged out - message from winston
+2021-05-14 12:00:28, info, inside postPhoto method - message from winston
+2021-05-14 12:00:28, info, inside postPhoto method - message from winston
+2021-05-14 12:00:28, info, inside postPhoto method - message from winston
+2021-05-14 12:00:28, info, inside postPhoto method - message from winston
+2021-05-14 12:00:28, info, inside postPhoto method - message from winston
+2021-05-14 12:00:48, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:49, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:49, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:50, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:50, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:50, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:50, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:51, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:51, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:51, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:51, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:52, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:52, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:52, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:52, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:52, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:53, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:53, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:53, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:54, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:54, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:54, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:55, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:55, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:55, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:56, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:56, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:56, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:56, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:56, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:57, error, incorrect password provided for signin - message from winston
+2021-05-14 12:00:57, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:08, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:08, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:08, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:08, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:09, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:09, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:09, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:10, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:14, error, error while finding user in the database - message from winston
+2021-05-14 12:01:15, error, error while finding user in the database - message from winston
+2021-05-14 12:01:16, error, error while finding user in the database - message from winston
+2021-05-14 12:01:16, error, error while finding user in the database - message from winston
+2021-05-14 12:01:16, error, error while finding user in the database - message from winston
+2021-05-14 12:01:16, error, error while finding user in the database - message from winston
+2021-05-14 12:01:17, error, error while finding user in the database - message from winston
+2021-05-14 12:01:17, error, error while finding user in the database - message from winston
+2021-05-14 12:01:17, error, error while finding user in the database - message from winston
+2021-05-14 12:01:17, error, error while finding user in the database - message from winston
+2021-05-14 12:01:18, error, error while finding user in the database - message from winston
+2021-05-14 12:01:18, error, error while finding user in the database - message from winston
+2021-05-14 12:01:18, error, error while finding user in the database - message from winston
+2021-05-14 12:01:18, error, error while finding user in the database - message from winston
+2021-05-14 12:01:19, error, error while finding user in the database - message from winston
+2021-05-14 12:01:19, error, error while finding user in the database - message from winston
+2021-05-14 12:01:20, error, error while finding user in the database - message from winston
+2021-05-14 12:01:20, error, error while finding user in the database - message from winston
+2021-05-14 12:01:20, error, error while finding user in the database - message from winston
+2021-05-14 12:01:20, error, error while finding user in the database - message from winston
+2021-05-14 12:01:21, error, error while finding user in the database - message from winston
+2021-05-14 12:01:21, error, error while finding user in the database - message from winston
+2021-05-14 12:01:21, error, error while finding user in the database - message from winston
+2021-05-14 12:01:22, error, error while finding user in the database - message from winston
+2021-05-14 12:01:22, error, error while finding user in the database - message from winston
+2021-05-14 12:01:22, error, error while finding user in the database - message from winston
+2021-05-14 12:01:22, error, error while finding user in the database - message from winston
+2021-05-14 12:01:23, error, error while finding user in the database - message from winston
+2021-05-14 12:01:23, error, error while finding user in the database - message from winston
+2021-05-14 12:01:23, error, error while finding user in the database - message from winston
+2021-05-14 12:01:28, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:29, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:29, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:30, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:30, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:30, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:31, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:31, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:31, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:31, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:33, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:33, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:34, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:34, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:34, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:35, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:36, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:36, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:36, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:36, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:37, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:38, error, incorrect password provided for signin - message from winston
+2021-05-14 12:01:38, error, incorrect password provided for signin - message from winston
+2021-05-14 12:05:47, info, inside getPosts method  - message from winston
+2021-05-14 12:05:47, info, inside postById method - message from winston
+2021-05-14 12:05:47, info, inside postById method - message from winston
+2021-05-14 12:05:47, info, inside postById method - message from winston
+2021-05-14 12:05:47, info, inside postById method - message from winston
+2021-05-14 12:05:47, info, inside postById method - message from winston
+2021-05-14 12:05:47, info, inside postPhoto method - message from winston
+2021-05-14 12:05:47, info, inside postPhoto method - message from winston
+2021-05-14 12:05:47, info, inside postPhoto method - message from winston
+2021-05-14 12:05:47, info, inside postPhoto method - message from winston
+2021-05-14 12:05:47, info, inside postPhoto method - message from winston
+2021-05-14 19:55:32, info, signed in successfully - message from winston
+2021-05-14 19:56:30, info, inside userById method - message from winston
+2021-05-14 19:56:30, info, inside getPostByUser method - message from winston
+2021-05-14 20:11:28, info, inside userById method - message from winston
+2021-05-14 20:11:28, info, inside updateUser method - message from winston
+2021-05-14 20:32:32, info, signed in successfully - message from winston
+2021-05-14 20:32:32, error, incorrect password provided for signin - message from winston
+2021-05-14 20:32:32, info, inside getPosts method  - message from winston
+2021-05-14 20:32:32, info, inside userById method - message from winston
+2021-05-14 20:32:33, info, inside getPostByUser method - message from winston
+2021-05-14 20:32:33, info, inside userById method - message from winston
+2021-05-14 20:32:33, info, inside updateUser method - message from winston
+2021-05-14 20:32:33, info, inside userById method - message from winston
+2021-05-14 20:32:33, error, error while fetching user details inside userById method - message from winston
