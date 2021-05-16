@@ -19,7 +19,8 @@ class ChatPage extends Component {
         super();
         this.state={
           to:'',
-          from:isAuthenticated().user._id,
+          //from: isAuthenticated().user._id,
+          from: isAuthenticated().user ? isAuthenticated().user._id : "",
           messages:[],
           nickname: ""
         }
