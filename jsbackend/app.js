@@ -89,6 +89,7 @@ io.on('connection', (socket) => { /* socket object may be used to send specific 
 
 	socket.on('disconnect', function () {
 		console.log('A user disconnected');
+
 	});
 });
 

@@ -5,7 +5,7 @@
   "main": "",
   "scripts": {
     "dev": "nodemon app.js",
-    "test": "mocha --recursive **/testcases/testRunner.js"
+    "test": "mocha --exit"
   },
   "author": "Srinivas Reddy Kotla",
   "license": "ISC",

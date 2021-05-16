@@ -84,7 +84,8 @@ class ChatPage extends Component {
       //listening to the new messages emitted to the current user's socket
        socket.on("new_message", (data) => {
             // Add new messages to existing messages in "chat"
-            console.log('Received message inside componentDidMount lifecycle',data)
+            console.log('Received message inside componentDidMount lifecycle',data);
+           addResponseMessage(data.message)
             this.setState({
                 messages:[...this.state.messages,{
 
