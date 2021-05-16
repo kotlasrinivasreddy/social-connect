@@ -7,6 +7,7 @@ import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
 import {allPostsByUser} from "../post/apiPost";
+import Message from './Message';
 
 class Profile extends Component
 {
@@ -125,9 +126,16 @@ class Profile extends Component
                                 </Link>
                                 <DeleteUser userId={user._id} />
                             </div>
-                        ) : (<FollowProfileButton
-                                following={this.state.following}
-                                onButtonClick={this.clickFollowButton} />)
+                        ) : (
+                            <>
+                                <FollowProfileButton
+                                    following={this.state.following}
+                                    onButtonClick={this.clickFollowButton} />
+
+                                <Message user={user} />
+
+                            </>
+                            )
                         }
 
                         <div>

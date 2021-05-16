@@ -132,3 +132,60 @@ export const findPeople = (userId, token) => {
             console.log(error);
         })
 }; // end of findPeople method
+
+
+//methods related to messaging
+
+export const getMessages = (user1, user2,token) => {
+    console.log("get all the messages exchanged between the two user",user1,user2)
+
+    return fetch(`${process.env.REACT_APP_API_URL}/user/conversation/message/${user1}/${user2}`, {
+        method: "GET",
+        headers:{
+            Accept: "application/json",
+            "Content-type":"application/json",
+            Authorization: `Bearer ${token}`
+        },
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const getConversations = (userId,token) => {
+    console.log("Fetch all the conversation of the user",userId)
+
+    return fetch(`${process.env.REACT_APP_API_URL}/user/conversation/${userId}`, {
+        method: "GET",
+        headers:{
+            Accept: "application/json",
+            "Content-type":"application/json",
+            Authorization: `Bearer ${token}`
+        },
+
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+export const sendMessage  = (userId,fromUser,newMessage,token) => {
+    console.log("Send the new message ",userId)
+
+    return fetch(`${process.env.REACT_APP_API_URL}/user/message/${userId}`, {
+        method: "POST",
+        headers:{
+            Accept: "application/json",
+            "Content-type":"application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body:JSON.stringify({fromUser,newMessage})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+

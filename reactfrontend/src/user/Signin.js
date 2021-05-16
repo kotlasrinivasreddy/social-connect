@@ -3,6 +3,9 @@ import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {signin, authenticate} from '../auth';
 import SocialLogin from "./SocialLogin";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3001",{ transports: ['websocket', 'polling', 'flashsocket']});
 
 class Signin extends Component {
     constructor() {
@@ -75,6 +78,9 @@ class Signin extends Component {
                 if (data.error)
                     this.setState({error: data.error, loading: false});//if error, no need of loading page
                 else {
+
+                    //store the user along with the socket id..
+                    socket.emit('User_Connected',data.user._id)
                     //authenticate the user and redirect
                     //data frm backend contains the json webtoken
                     authenticate(data, () => {

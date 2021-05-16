@@ -62,6 +62,44 @@ const server= app.listen(process.env.PORT, () => {
 
 });
 
+//socket messaging
+const io = require('socket.io')(server);
+
+let users=[];
+io.on('connection', (socket) => { /* socket object may be used to send specific messages to the new connected client */
+
+	const { id } = socket.client;
+	console.log(`User connected: ${id}`)
+	//When a user logs in store his user id and the socket id...
+	socket.on('User_Connected',function(userId){
+		users[userId]=socket.id;
+		console.log('All Users',users);
+
+
+	})
+
+	socket.on("chat_message", (data) => {
+		console.log('Inside the socket',data)
+		//search for the socket id of the receiver
+		console.log('Who is the receiver?',data.receiver)
+		let socketId=users[data.receiver]
+		//Now emit the recieved message to the receivers socket id
+		io.to(socketId).emit('new_message',data)
+	});
+
+	socket.on('disconnect', function () {
+		console.log('A user disconnected');
+	});
+});
+
+// Assign socket object to every request
+app.use(function (req, res, next) {
+	req.io = io;
+	next();
+});
+
+
+
 //console.log("MONGO URI IS " + process.env.MONGO_URI);
 //console.log("Port number is: "+ process.env.PORT);
 

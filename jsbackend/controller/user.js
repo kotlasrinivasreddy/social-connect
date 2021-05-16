@@ -5,6 +5,10 @@ const formidable= require('formidable');
 const fs= require('fs');
 const model_post= require('../models/post');
 const logger = require("../logging/loggerConfig");
+const conversations=require("../models/Conversations");
+const Message=require("../models/Message");
+const mongoose = require('mongoose');
+
 
 exports.userById = (req, res, next, id) => {
 
@@ -283,4 +287,140 @@ exports.findPeople= (req, res) => {
     }).select("_id name");
 
 }; // end of findPeople method
+
+
+//conversation methods --messages
+
+//Get Conversations  list of a particular user
+exports.getConversations=(req,res)=>{
+    console.log('getting the user conversation')
+    let user= mongoose.Types.ObjectId(req.profile._id)
+    conversations.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'recipients',
+                foreignField: '_id',
+                as: 'recipientObj',
+            },
+        },
+    ])
+        .match({ recipients: { $all: [{ $elemMatch: { $eq: user } }] } })
+        .sort({date:-1})
+        .exec((err, result) => {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                console.log(result)
+                res.send(result);
+            }
+        });
+}
+// Get messages from conversation based on to & from
+exports.getMessage=(req,res)=>{
+    console.log('Get messages from conversation based on to & from');
+    let user1= mongoose.Types.ObjectId(req.params.user1)
+    let user2= mongoose.Types.ObjectId(req.params.user2)
+
+    Message.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'to',
+                foreignField: '_id',
+                as: 'toObj',
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'from',
+                foreignField: '_id',
+                as: 'fromObj',
+            },
+        },
+    ])
+        .match({
+            $or: [
+                { $and: [{ to: user1 }, { from: user2 }] },
+                { $and: [{ to: user2 }, { from: user1 }] },
+            ],
+        })
+        .exec((err, messages) => {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                console.log(messages)
+                res.send(messages);
+            }
+        });
+}
+
+// Post private message
+exports.sendMessage=(req, res) => {
+    console.log('Sending Messages',JSON.stringify(req.body))
+
+    let from =  mongoose.Types.ObjectId(req.body.fromUser)
+    let to = mongoose.Types.ObjectId(req.profile._id)
+    let text=req.body.newMessage
+    console.log(from,to,text)
+    conversations.findOneAndUpdate(
+        {
+            recipients: {
+                $all: [
+                    { $elemMatch: { $eq: from } },
+                    { $elemMatch: { $eq: to } },
+                ],
+            },
+        },
+        {
+            recipients: [req.body.fromUser, req.profile._id],
+            lastMessage: text,
+            date: Date.now(),
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true },
+        function(err, conversation) {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                console.log(conversation)
+                let message = new Message({
+                    conversation: conversation._id,
+                    to: req.profile._id,
+                    from: req.body.fromUser,
+                    body: req.body.newMessage,
+                });
+
+                message.save(err => {
+                    if (err) {
+                        console.log(err);
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify({ message: 'Failure' }));
+                        res.sendStatus(500);
+                    } else {
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(
+                            JSON.stringify({
+                                message: 'Success',
+                                conversationId: conversation._id,
+                                new_message:message
+                            })
+                        );
+                    }
+                });
+            }
+        }
+    )
+}
+
+
 
