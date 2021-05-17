@@ -336,7 +336,7 @@ exports.getMessage=(req,res)=>{
         },
         {
             $lookup: {
-                from: 'users',
+                from: 'user_schema',
                 localField: 'from',
                 foreignField: '_id',
                 as: 'fromObj',
