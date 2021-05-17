@@ -15,7 +15,7 @@ describe('/POST auth',()=>{
             expect(res).to.have.status(200);
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 describe('',()=>{
@@ -27,7 +27,7 @@ describe('',()=>{
             expect(res).to.have.status(401);
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 // describe('',()=>{
@@ -53,7 +53,7 @@ describe('',()=>{
             expect(res).to.have.status(400);
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 describe('/POST auth',()=>{
@@ -62,7 +62,7 @@ describe('/POST auth',()=>{
             expect(res).to.have.status(200);
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 describe('/GET posts',()=>{
@@ -72,7 +72,7 @@ describe('/GET posts',()=>{
             console.log(res.body)
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 // describe('/POST auth',()=>{
@@ -93,7 +93,7 @@ describe('/GET posts by UserID',()=>{
             console.log(res.body)
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 describe('/PUT updateUser',()=>{
@@ -106,7 +106,7 @@ describe('/PUT updateUser',()=>{
             console.log(res.body)
             done();
         });
-    });
+    }).timeout(10000);
 });
 
 describe('/delete user',()=>{
@@ -116,5 +116,5 @@ describe('/delete user',()=>{
             console.log(res.body)
             done();
         });
-    });
+    }).timeout(10000);
 });

@@ -5550,3 +5550,21 @@
 2021-05-17 09:53:50, info, inside userPhoto method - message from winston
 2021-05-17 09:53:50, info, inside userById method - message from winston
 2021-05-17 09:53:50, info, inside userPhoto method - message from winston
+2021-05-17 11:05:29, info, signed in successfully - message from winston
+2021-05-17 11:05:29, error, incorrect password provided for signin - message from winston
+2021-05-17 11:05:29, info, inside getPosts method  - message from winston
+2021-05-17 11:05:29, info, inside userById method - message from winston
+2021-05-17 11:05:30, info, inside getPostByUser method - message from winston
+2021-05-17 11:05:30, info, inside userById method - message from winston
+2021-05-17 11:05:30, info, inside updateUser method - message from winston
+2021-05-17 11:05:30, info, inside userById method - message from winston
+2021-05-17 11:05:30, error, error while fetching user details inside userById method - message from winston
+2021-05-17 11:23:56, info, signed in successfully - message from winston
+2021-05-17 11:23:57, error, incorrect password provided for signin - message from winston
+2021-05-17 11:23:57, info, inside getPosts method  - message from winston
+2021-05-17 11:23:57, info, inside userById method - message from winston
+2021-05-17 11:23:57, info, inside getPostByUser method - message from winston
+2021-05-17 11:23:57, info, inside userById method - message from winston
+2021-05-17 11:23:57, info, inside updateUser method - message from winston
+2021-05-17 11:23:57, info, inside userById method - message from winston
+2021-05-17 11:23:57, error, error while fetching user details inside userById method - message from winston

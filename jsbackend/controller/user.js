@@ -298,7 +298,7 @@ exports.getConversations=(req,res)=>{
     conversations.aggregate([
         {
             $lookup: {
-                from: 'users',
+                from: 'user_schema',
                 localField: 'recipients',
                 foreignField: '_id',
                 as: 'recipientObj',
@@ -328,7 +328,7 @@ exports.getMessage=(req,res)=>{
     Message.aggregate([
         {
             $lookup: {
-                from: 'users',
+                from: 'user_schema',
                 localField: 'to',
                 foreignField: '_id',
                 as: 'toObj',
