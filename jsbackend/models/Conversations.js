@@ -6,7 +6,7 @@ const { ObjectId } = mongoose.Schema;
 
 // Create Schema for Users
 const ConversationSchema = new Schema({
-    recipients: [{ type: ObjectId, ref: 'users' }],
+    recipients: [{ type: ObjectId, ref: 'user_schema' }],
     lastMessage: {
         type: String,
     },
@@ -15,4 +15,4 @@ const ConversationSchema = new Schema({
         default: Date.now,
     },
 });
-module.exports=mongoose.model("Conversations",ConversationSchema);
+module.exports=mongoose.model("conversations",ConversationSchema);

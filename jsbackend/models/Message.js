@@ -12,11 +12,11 @@ const messageSchema = new Schema({
     },
     to: {
         type: ObjectId,
-        ref: 'users',
+        ref: 'user_schema',
     },
     from: {
         type:ObjectId,
-        ref: 'users',
+        ref: 'user_schema',
     },
     body: {
         type: String,
@@ -28,4 +28,4 @@ const messageSchema = new Schema({
     },
 });
 
-module.exports=mongoose.model("Message",messageSchema);
+module.exports=mongoose.model("Message", messageSchema);
